@@ -11,9 +11,19 @@ require('./bootstrap');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
 import vueClip from 'vue-clip'
+import VeeValidate from 'vee-validate';
+import es from './locale/es'
 
 Vue.use(vueClip);
+Vue.use(VeeValidate, {
+    locale: 'es',
+    dictionary: {
+        es: {messages: es.messages}
+    }
+
+});
 
 Vue.component('user', require('./components/user/index.vue'));
 Vue.component('super', require('./components/super/index.vue'));

@@ -205,8 +205,8 @@
                                 <td class="text-center" v-if="file.size">
                                     {{sizeOfFile(file.size)}}
                                 </td>
-                                <td class="text-center">
-                                    {{file.status}}
+                                <td class="text-center" v-if="file.status === 'error'">
+                                    <span class="label label-danger">Error en la subida</span>
                                 </td>
                                 <td class="text-center center-block">
                                     <div class="text-center center-block">

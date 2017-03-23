@@ -19,6 +19,7 @@ class CreateCampusesTable extends Migration
             $table->foreign('idSede')->references('id')->on('sedes');
             $table->string('campus');
             $table->integer('pabellones');
+
             $table->timestamps();
         });
     }

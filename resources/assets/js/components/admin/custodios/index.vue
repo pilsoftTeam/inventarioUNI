@@ -6,21 +6,37 @@
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: solid 1px lightgrey">
                 <form action="" method="post" role="form" @submit.prevent="saveCustodios">
                     <h4 class="text-center">Mantenedor custodios</h4>
+
                     <div class="form-group">
                         <label for="rut">Rut :</label>
-                        <input type="text"
-                               v-model="newCustodio.rut"
+
+                        <input v-validate="'required|numeric|min:7|max:9'"
                                class="form-control"
+                               v-model="newCustodio.rut"
+                               :class="{'input': true, 'is-danger': errors.has('rut') }"
                                id="rut"
-                               placeholder="Escriba aca .....">
+                               name="rut"
+                               type="text"
+                               placeholder="Rut sin digito verificador ni guion">
+                        <span v-show="errors.has('rut')"
+                              class="help danger text-center">
+                            {{ errors.first('rut') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="nombre">Nombre : </label>
                         <input type="text"
+                               v-validate="'required|alpha_spaces'"
+                               :class="{'input': true, 'is-danger': errors.has('nombre') }"
                                v-model="newCustodio.nombre"
                                class="form-control"
                                id="nombre"
+                               name="nombre"
                                placeholder="Escriba aca .....">
+                        <span v-show="errors.has('nombre')"
+                              class="help danger text-center">
+                            {{ errors.first('nombre') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="unidad">Unidad : </label>
@@ -48,6 +64,7 @@
                 <table class="table table-hover table-striped">
                     <thead>
                     <tr>
+                        <th class="text-center">#</th>
                         <th class="text-center">Rut</th>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Unidad</th>
@@ -56,11 +73,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td class="text-center">asdas</td>
-                        <td class="text-center">asdas</td>
-                        <td class="text-center">asdas</td>
-                        <td class="text-center">asdas</td>
+                    <tr v-for="(custodio, key) in custodios">
+                        <td class="text-center">{{key + 1}}</td>
+                        <td class="text-center">{{custodio.rut}}</td>
+                        <td class="text-center">{{custodio.nombre}}</td>
+                        <td class="text-center">{{custodio.unidad}}</td>
+                        <td class="text-center">{{custodio.nombreDependencia}}</td>
                         <td class="text-center" colspan="2">
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 <button class="btn btn-block btn-warning btn-xs" title="Editar este custodio">
@@ -82,8 +100,23 @@
 
     </div>
 </template>
+<style>
+    .is-danger {
+        border-color: rgba(229, 103, 23, 0.8);
+        box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+        outline: 0 none;
+    }
+
+    .danger {
+        color: red;
+    }
+</style>
 <script>
+    import {Validator} from 'vee-validate';
     export default {
+        mounted(){
+            this.getCustodios();
+        },
         data () {
             return {
                 newCustodio: {
@@ -91,13 +124,35 @@
                     nombre: '',
                     unidad: '',
                     dependencia: ''
-                }
+                },
+                custodios: ''
             }
         },
         methods: {
+            getCustodios(){
+                axios.get('api/get/custodios').then(r => {
+                    this.custodios = r.data
+                }).catch(e => {
+                    console.log(e)
+                })
+            },
             saveCustodios(){
-                console.log(Math.PI)
-            }
-        }
+                this.$validator.validateAll().then(() => {
+                    axios.post('api/create/custodio', this.newCustodio).then(r => {
+                        this.newCustodio.rut = '';
+                        this.newCustodio.nombre = '';
+                        this.newCustodio.unidad = '';
+                        this.newCustodio.dependencia = '';
+
+                        this.getCustodios();
+                    }).catch(e => {
+                        console.log(e)
+                    })
+                }).catch(() => {
+                });
+            },
+
+        },
+        computed: {},
     }
 </script>

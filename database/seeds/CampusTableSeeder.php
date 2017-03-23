@@ -110,16 +110,6 @@ class CampusTableSeeder extends Seeder
             ],
             [
                 'idSede' => 1,
-                'campus' => 'Edificio Dharma',
-                'pabellones' => 1
-            ],
-            [
-                'idSede' => 1,
-                'campus' => 'Pedro Lagos',
-                'pabellones' => 1
-            ],
-            [
-                'idSede' => 1,
                 'campus' => 'Pedro Lagos',
                 'pabellones' => 1
             ],
