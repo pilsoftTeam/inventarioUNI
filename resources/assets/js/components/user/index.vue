@@ -137,8 +137,6 @@
                     this.campus = _.find(this.sedes, c => {
                         return c.id == this.data.sede;
                     });
-                } else {
-                    console.log('THERE IS NOT A OBJECT')
                 }
             },
             setPabellon(){
@@ -152,8 +150,6 @@
                             this.pabellones = c;
                         }
                     });
-                } else {
-                    console.log("THERE IS NO A OBJECT")
                 }
 
             },
@@ -166,7 +162,6 @@
                     }
                 });
                 this.names.sede = this.campus.sede;
-
                 this.showComponent = true;
             },
 

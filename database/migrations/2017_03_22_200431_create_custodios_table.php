@@ -16,7 +16,7 @@ class CreateCustodiosTable extends Migration
         Schema::create('custodios', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
-            $table->integer('rut');
+            $table->integer('rut')->unique();
             $table->string('unidad');
             $table->string('nombreDependencia');
             $table->timestamps();

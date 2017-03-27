@@ -12,14 +12,37 @@ class CustodiosController extends Controller
         return response()->json(Custodios::all(), 200);
     }
 
+    public function search($rut)
+    {
+        $rutCustodio = Custodios::where('rut', $rut)->first();
+        return response()->json($rutCustodio, 200);
+    }
+
     public function create(Request $request)
     {
         $c = new Custodios();
         $c->nombre = $request->nombre;
         $c->rut = $request->rut;
         $c->unidad = $request->unidad;
-        $c->nombreDependencia = $request->dependencia;
+        $c->nombreDependencia = $request->nombreDependencia;
         $c->save();
-        return response()->json(201);
+        return response()->json([], 201);
+    }
+
+    public function edit(Request $request)
+    {
+        Custodios::where('id', $request->id)->update([
+            'rut' => $request->rut,
+            'nombre' => $request->nombre,
+            'unidad' => $request->unidad,
+            'nombreDependencia' => $request->nombreDependencia
+        ]);
+        return response()->json([], 200);
+    }
+
+    public function delete($id)
+    {
+        Custodios::destroy($id);
+        return response()->json([], 200);
     }
 }

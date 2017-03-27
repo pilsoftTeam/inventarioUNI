@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <label for="dependencia">Nombre Dependencia :</label>
                         <input type="text"
-                               v-model="newCustodio.dependencia"
+                               v-model="newCustodio.nombreDependencia"
                                class="form-control"
                                id="dependencia"
                                placeholder="Escriba aca .....">
@@ -69,7 +69,7 @@
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Unidad</th>
                         <th class="text-center">Dependencia</th>
-                        <th class="text-center" colspan="2">Opciones</th>
+                        <th class="text-center">Opciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -79,14 +79,18 @@
                         <td class="text-center">{{custodio.nombre}}</td>
                         <td class="text-center">{{custodio.unidad}}</td>
                         <td class="text-center">{{custodio.nombreDependencia}}</td>
-                        <td class="text-center" colspan="2">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                <button class="btn btn-block btn-warning btn-xs" title="Editar este custodio">
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <button class="btn btn-block btn-warning btn-xs"
+                                        data-toggle="modal" href="#modalEditar"
+                                        @click="setCustodio(custodio, 'editar')"
+                                        title="Editar este custodio">
                                     <i class="fa fa-pencil"></i>
                                 </button>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                <button class="btn btn-block btn-danger btn-xs" title="Eliminar este custodio">
+                                <button class="btn btn-block btn-danger btn-xs"
+                                        data-toggle="modal" href="#modalEliminar"
+                                        @click="setCustodio(custodio, 'eliminar')"
+                                        title="Eliminar este custodio">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -94,6 +98,93 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="modalEditar">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Edicion de custodios</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label>Rut :</label>
+                                    <input v-validate="'required|numeric|min:7|max:9'"
+                                           class="form-control"
+                                           v-model="editCustodio.rut"
+                                           :class="{'input': true, 'is-danger': errors.has('rut') }"
+                                           name="rut"
+                                           type="text"
+                                           placeholder="Rut sin digito verificador ni guion">
+                                    <span v-show="errors.has('rut')"
+                                          class="help danger text-center">{{errors.first('rut')}}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre :</label>
+                                    <input type="text"
+                                           v-validate="'required|alpha_spaces'"
+                                           :class="{'input': true, 'is-danger': errors.has('nombre') }"
+                                           v-model="editCustodio.nombre"
+                                           class="form-control"
+                                           name="nombre"
+                                           placeholder="Escriba aca .....">
+                                    <span v-show="errors.has('nombre')" class="help danger text-center">{{errors.first('nombre')}}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Unidad :</label>
+                                    <input type="text"
+                                           v-model="editCustodio.unidad"
+                                           class="form-control"
+                                           placeholder="Escriba aca .....">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre Dependencia :</label>
+                                    <input type="text"
+                                           v-model="editCustodio.nombreDependencia"
+                                           class="form-control"
+                                           placeholder="Escriba aca .....">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default">Cerrar</button>
+                        <button type="button" @click="edit"
+                                class="btn btn-warning"
+                                data-dismiss="modal">
+                            Guardar Cambios
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+
+        <div class="modal fade" id="modalEliminar">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h4 class="text-center">¿ Esta seguro que desea eliminar este custodio ?</h4>
+                                <br>
+                                <button class="btn btn-block btn-danger" @click="erase">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -123,9 +214,17 @@
                     rut: '',
                     nombre: '',
                     unidad: '',
-                    dependencia: ''
+                    nombreDependencia: ''
                 },
-                custodios: ''
+                custodios: {},
+                editCustodio: {
+                    id: '',
+                    rut: '',
+                    nombre: '',
+                    unidad: '',
+                    nombreDependencia: ''
+                },
+                deleteCustodio: ''
             }
         },
         methods: {
@@ -142,7 +241,7 @@
                         this.newCustodio.rut = '';
                         this.newCustodio.nombre = '';
                         this.newCustodio.unidad = '';
-                        this.newCustodio.dependencia = '';
+                        this.newCustodio.nombreDependencia = '';
 
                         this.getCustodios();
                     }).catch(e => {
@@ -151,6 +250,36 @@
                 }).catch(() => {
                 });
             },
+            setCustodio(object, method){
+                if (method === 'editar') {
+                    this.editCustodio.id = object.id;
+                    this.editCustodio.rut = object.rut;
+                    this.editCustodio.nombre = object.nombre;
+                    this.editCustodio.unidad = object.unidad;
+                    this.editCustodio.nombreDependencia = object.nombreDependencia;
+                } else if (method === 'eliminar') {
+                    this.deleteCustodio = object.id
+                } else {
+
+                }
+            },
+
+            edit(){
+                axios.put('api/edit/custodio', this.editCustodio).then(r => {
+                    this.getCustodios();
+                    $('#modalEditar').modal('hide')
+                }).catch(e => {
+                    console.log(e)
+                });
+            },
+            erase(){
+                axios.delete('api/delete/custodio/' + this.deleteCustodio).then(r => {
+                    this.getCustodios();
+                    $('#modalEliminar').modal('hide')
+                }).catch(e => {
+                    console.log(e)
+                })
+            }
 
         },
         computed: {},

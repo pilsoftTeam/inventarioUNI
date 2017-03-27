@@ -14,11 +14,6 @@
                             Mantenedor Custodios
                         </a>
                     </li>
-                    <li>
-                        <a href="#tab3" role="tab" data-toggle="tab">
-                            Tab3
-                        </a>
-                    </li>
                 </ul>
                 <!-- TAB CONTENT -->
                 <div class="tab-content">
@@ -29,10 +24,6 @@
                     <div class="tab-pane fade" id="tab2">
                         <br>
                         <custodios></custodios>
-                    </div>
-                    <div class="tab-pane fade" id="tab3">
-                        <h2>Tab3</h2>
-                        <p>Lorem ipsum.</p>
                     </div>
                 </div>
 

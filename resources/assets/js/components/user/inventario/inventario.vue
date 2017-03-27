@@ -8,8 +8,6 @@
                 <br>
                 <div class="panel panel-default">
                     <div class="panel-body">
-
-
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -48,33 +46,46 @@
                             <tr v-for="(item, key) in items">
                                 <td class="text-center">{{key + 1}}</td>
                                 <td>
-                                    <input type="text" v-model="item.codigo.anterior" class="form-control">
+                                    <input type="text"
+                                           v-model="item.codigo.anterior"
+                                           class="form-control input-sm">
                                 </td>
                                 <td>
-                                    <input type="text" v-model="item.codigo.nuevo" class="form-control">
+                                    <input type="text"
+                                           v-model="item.codigo.nuevo"
+                                           class="form-control input-sm">
                                 </td>
                                 <td colspan="2">
-                                    <input type="text" v-model="item.detalles.descripcion" class="form-control">
+                                    <input type="text"
+                                           v-model="item.detalles.descripcion"
+                                           class="form-control input-sm">
                                 </td>
                                 <td>
-                                    <input type="text" v-model="item.detalles.marca" class="form-control">
+                                    <input type="text"
+                                           v-model="item.detalles.marca"
+                                           class="form-control input-sm">
                                 </td>
                                 <td>
-                                    <input type="text" v-model="item.detalles.modelo" class="form-control">
+                                    <input type="text"
+                                           v-model="item.detalles.modelo"
+                                           class="form-control input-sm">
                                 </td>
                                 <td>
-                                    <input type="text" v-model="item.detalles.numeroSerie" class="form-control">
+                                    <input type="text"
+                                           v-model="item.detalles.numeroSerie"
+                                           class="form-control input-sm">
                                 </td>
                                 <td>
                                     <button class="btn text-center center-block"
                                             data-toggle="modal"
                                             href="#modal-upload"
+                                            @click="setUpload(item.fileList)"
                                             title=" Subir una foto">
                                         <i class="fa fa-picture-o"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <select class="form-control" v-model="item.estado">
+                                    <select class="form-control input-sm" v-model="item.estado">
                                         <option value="">Elija</option>
                                         <option value="bueno">Bueno</option>
                                         <option value="malo">Malo</option>
@@ -82,7 +93,8 @@
                                     </select>
                                 </td>
                                 <td colspan="2" v-model="item.comentario">
-                                    <input type="text" class="form-control">
+                                    <input type="text"
+                                           class="form-control input-sm">
                                 </td>
 
                                 <td>
@@ -92,7 +104,8 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger text-center center-block" @click="deleteRow(key)"
+                                    <button class="btn btn-danger text-center center-block"
+                                            @click="deleteRow(key)"
                                             title="Eliminar fila">
                                         <i class="fa fa-minus"></i>
                                     </button>
@@ -102,7 +115,9 @@
                         </table>
                         <hr>
 
-                        <a class="btn btn-warning pull-left" data-toggle="modal" href="#modal-id">
+                        <a class="btn btn-warning pull-left"
+                           data-toggle="modal"
+                           href="#modal-id">
                             <i class="fa fa-adjust"></i>
                         </a>
                         <div class="btn-group pull-right">
@@ -112,7 +127,9 @@
                                     title="Agregar una fila al final">
                                 <i class="fa fa-plus"></i>
                             </button>
-                            <button type="button" class="btn btn-success" title="Terminar inventario">
+                            <button type="button"
+                                    class="btn btn-success"
+                                    title="Terminar inventario">
                                 <i class="fa fa-check"></i>
                             </button>
                         </div>
@@ -191,7 +208,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="file in fileList">
+                            <tr v-for="(file, key) in selectedFileList">
                                 <td class="text-center" colspan="3">
                                     <img style="margin: 0 auto"
                                          :src="file.dataUrl"
@@ -208,30 +225,23 @@
                                 <td class="text-center" v-if="file.status === 'error'">
                                     <span class="label label-danger">Error en la subida</span>
                                 </td>
-                                <td class="text-center center-block">
-                                    <div class="text-center center-block">
-                                        <button type="button"
-                                                class="btn btn-block btn-warning btn-xs text-center center-block"
-                                                title="Renombrar este archivo">
-                                            <i class="fa fa-pencil"></i>
-                                        </button>
-                                        <button type="button"
-                                                class="btn btn-block btn-danger btn-xs text-center center-block"
-                                                title="Eliminar este archivo">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </div>
+                                <td class="text-center" v-else>
+                                    <span class="label label-success">Subida exitosa</span>
+                                </td>
+                                <td class="row">
+                                    <button class="btn btn-block btn-xs btn-danger" title="Eliminar este archivo"
+                                            @click="removeFile(key, file)">
+                                        <i class="fa fa-trash-o fa-2x"></i>
+                                    </button>
                                 </td>
 
                             </tr>
                             </tbody>
                         </table>
-
-
                     </div>
-
                     <div class="modal-footer">
-                        <vue-clip :options="options" :on-added-file="fileAdded">
+                        <vue-clip :options="options" :on-added-file="fileAdded"
+                                  :onSending="onSending">
                             <template slot="clip-uploader-action" scope="params">
                                 <div :class="{'is-dragging': params.dragging}">
                                     <div class="dz-message ">
@@ -291,20 +301,18 @@
                         modelo: '',
                         numeroSerie: ''
                     },
-                    foto: '',
+                    fileList: [],
                     estado: '',
                     comentario: ''
                 }],
 
-                fileList: [],
-
-
+                selectedFileList: '',
                 options: {
-                    url: '/upload',
+                    url: 'api/file/upload',
                     paramName: 'file',
                     headers: {
                         'X-CSRF-TOKEN': window.Laravel.csrfToken,
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'X-Requested-With': 'XMLHttpRequest',
                     }
                 }
 
@@ -317,6 +325,32 @@
             }
         },
         methods: {
+
+
+            setUpload(fileList){
+                this.selectedFileList = fileList
+            },
+            onSending(file, xhr, formData){
+                // JSON.stringify(JSON.parse(this.dataInventario))
+                formData.append('dataInventario', JSON.stringify(this.dataInventario))
+            },
+            fileAdded(file){
+                this.selectedFileList.push(file)
+            },
+            removeFile(index, file){
+                if (index > -1) {
+                    this.selectedFileList.splice(index, 1);
+                    let formData = this.dataInventario;
+                    formData.filename = file.name
+                    axios.post('api/file/remove', formData).then(r => {
+                        console.log(r)
+                    }).catch(e => {
+                        console.log(e)
+                    })
+
+
+                }
+            },
             pushItem(){
                 const item = {
                     codigo: {
@@ -329,25 +363,23 @@
                         modelo: '',
                         numeroSerie: ''
                     },
-                    foto: '',
+                    fileList: [],
                     estado: '',
                     comentario: ''
                 };
                 this.items.push(item);
 
             },
-            fileAdded(file){
-                this.fileList.push(file)
-            },
             deleteRow(index){
                 if (index > -1) {
                     this.items.splice(index, 1);
                 }
             },
-
             sizeOfFile(bytes){
                 return filesize(bytes)
-            }
+            },
+
+
         },
         computed: {}
 

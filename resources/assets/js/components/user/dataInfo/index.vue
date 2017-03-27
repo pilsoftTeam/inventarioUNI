@@ -37,40 +37,51 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div v-if="custodio">
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" v-if="rutMatch">
-            <h4 class="text-center">Datos del custodio</h4>
-            <hr>
-            <table class="table table-hover">
-                <thead>
-                <tr class="text-center">
-                    <th class="text-center"><b>Rut</b></th>
-                    <th class="text-center"><b>Nombre</b></th>
-                    <th class="text-center"><b>Unidad</b></th>
-                    <th class="text-center"><b>Nombre Dependencia</b></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="text-center">{{datosCustodio.rut}}</td>
-                    <td class="text-center">{{datosCustodio.nombre}}</td>
-                    <td class="text-center">{{datosCustodio.unidad}}</td>
-                    <td class="text-center">{{datosCustodio.nombreDependencia}}</td>
-                </tr>
-                </tbody>
-            </table>
 
-            <button class="btn btn-block btn-success" @click="empezar">Empezar el inventario</button>
-        </div>
-        <div class="col-sm-12" v-if="rutMatch === false">
-            <div class="alert alert-danger fade in">
-                <strong>Error : </strong> El rut <b>{{rutCustodio}}</b> no existe en la base de datos. Intente
-                nuevamente
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <h4 class="text-center">Datos del custodio</h4>
+                        <hr>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr class="text-center">
+                                <th class="text-center"><b>Rut</b></th>
+                                <th class="text-center"><b>Nombre</b></th>
+                                <th class="text-center"><b>Unidad</b></th>
+                                <th class="text-center"><b>Nombre Dependencia</b></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-center">{{custodio.rut}}</td>
+                                <td class="text-center">{{custodio.nombre}}</td>
+                                <td class="text-center">{{custodio.unidad}}</td>
+                                <td class="text-center">{{custodio.nombreDependencia}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <button class="btn btn-block btn-success" @click="empezar">Empezar el inventario</button>
+                    </div>
+
+
+                </div>
+                <div v-else>
+                    <p class="text-center" v-if="beforeCall">
+                        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    </p>
+
+                    <div class="alert alert-danger fade in" v-if="wrongCall">
+                        <strong>Error : </strong> El rut <b>{{rutCustodio}}</b> no existe en la base de datos. Intente
+                        nuevamente
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
-
-
     </div>
 </template>
 
@@ -81,17 +92,10 @@
                 items: {
                     campus: '',
                 },
-
-                rut: '17808985',
-                datosCustodio: {
-                    rut: '17808985',
-                    nombre: 'Julio Contreras Marchant',
-                    unidad: 'Unidad',
-                    nombreDependencia: 'Nombre dependencia'
-
-                },
+                custodio: '',
                 rutCustodio: '',
-                rutMatch: ''
+                beforeCall: false,
+                wrongCall: false
             }
         },
         props: {
@@ -106,15 +110,28 @@
         },
         methods: {
             buscarCustodio(){
-                this.rutCustodio == this.rut ? this.rutMatch = true : this.rutMatch = false;
-                if (this.rutMatch == false) {
-                    setTimeout(function () {
-                        this.rutMatch = ''
-                    }.bind(this), 4000);
+                this.beforeCall = true;
+                if (this.rutCustodio) {
+                    axios.get('api/get/custodio/' + this.rutCustodio).then(r => {
+                        if (r.data.length === 0) {
+                            this.wrongCall = true;
+                            this.beforeCall = false;
+                            setTimeout(function () {
+                                this.wrongCall = false
+                            }.bind(this), 3500)
+                        } else {
+                            this.beforeCall = false;
+                            this.custodio = r.data
+                        }
+                    }).catch(e => {
+                        console.log(e)
+                    })
                 }
+
+
             },
             empezar(){
-                this.$emit('custodio', this.datosCustodio)
+                this.$emit('custodio', this.custodio)
             }
         }
     }
