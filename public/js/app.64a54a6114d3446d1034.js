@@ -33135,8 +33135,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -33168,7 +33166,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.beforeCall = true;
             if (this.rutCustodio) {
                 axios.get('api/get/custodio/' + this.rutCustodio).then(function (r) {
-                    if (r.data.length === 0) {
+                    if (r.data.length == 0) {
+                        _this.custodio = '';
                         _this.wrongCall = true;
                         _this.beforeCall = false;
                         setTimeout(function () {
@@ -33712,6 +33711,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }],
 
             selectedFileList: '',
+            selectedIndex: '',
             options: {
                 url: 'api/file/upload',
                 paramName: 'file',
@@ -33731,12 +33731,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-        setUpload: function setUpload(fileList) {
+        setUpload: function setUpload(fileList, index) {
             this.selectedFileList = fileList;
+            this.selectedIndex = index;
         },
         onSending: function onSending(file, xhr, formData) {
-            // JSON.stringify(JSON.parse(this.dataInventario))
-            formData.append('dataInventario', JSON.stringify(this.dataInventario));
+            var dataInventario = this.dataInventario;
+            dataInventario.index = this.selectedIndex;
+            formData.append('dataInventario', JSON.stringify(dataInventario));
         },
         fileAdded: function fileAdded(file) {
             this.selectedFileList.push(file);
@@ -33746,11 +33748,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.selectedFileList.splice(index, 1);
                 var formData = this.dataInventario;
                 formData.filename = file.name;
-                axios.post('api/file/remove', formData).then(function (r) {
-                    console.log(r);
-                }).catch(function (e) {
-                    console.log(e);
-                });
+                axios.post('api/file/remove', formData).then().catch();
             }
         },
         pushItem: function pushItem() {
@@ -33778,6 +33776,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         sizeOfFile: function sizeOfFile(bytes) {
             return __WEBPACK_IMPORTED_MODULE_0_filesize___default()(bytes);
+        },
+        onComplete: function onComplete(file, status, xhr) {
+            this.selectedFileList.ruta = xhr;
+        },
+        uploadInventario: function uploadInventario() {
+            var items = this.items;
+            axios.post('api/upload/inventario', items).then(function (r) {
+                console.log(r);
+            }).catch(function (e) {
+                console.log(e);
+            });
         }
     },
     computed: {}
@@ -42273,13 +42282,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "table table-hover"
   }, [_vm._m(1), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.custodio.rut))]), _vm._v(" "), _c('td', {
+  }, [_vm._v(_vm._s(_vm.custodio[0].rut))]), _vm._v(" "), _c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.custodio.nombre))]), _vm._v(" "), _c('td', {
+  }, [_vm._v(_vm._s(_vm.custodio[0].nombre))]), _vm._v(" "), _c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.custodio.unidad))]), _vm._v(" "), _c('td', {
+  }, [_vm._v(_vm._s(_vm.custodio[0].unidad))]), _vm._v(" "), _c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.custodio.nombreDependencia))])])])]), _vm._v(" "), _c('button', {
+  }, [_vm._v(_vm._s(_vm.custodio[0].nombreDependencia))])])])]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-block btn-success",
     on: {
       "click": _vm.empezar
@@ -42521,7 +42530,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       on: {
         "click": function($event) {
-          _vm.setUpload(item.fileList)
+          _vm.setUpload(item.fileList, key + 1)
         }
       }
     }, [_c('i', {
@@ -42638,13 +42647,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "text-center"
   }, [_vm._v(_vm._s(_vm.dataInventario.codigoUbicacion))]), _vm._v(" "), _c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.dataInventario.custodio.rut))]), _vm._v(" "), _c('td', {
+  }, [_vm._v(_vm._s(_vm.dataInventario.custodio[0].rut))]), _vm._v(" "), _c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.dataInventario.custodio.nombre))]), _vm._v(" "), _c('td', {
+  }, [_vm._v(_vm._s(_vm.dataInventario.custodio[0].nombre))]), _vm._v(" "), _c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.dataInventario.custodio.unidad))]), _vm._v(" "), _c('td', {
+  }, [_vm._v(_vm._s(_vm.dataInventario.custodio[0].unidad))]), _vm._v(" "), _c('td', {
     staticClass: "text-center"
-  }, [_vm._v(_vm._s(_vm.dataInventario.custodio.nombreDependencia))])])])])])])]), _vm._v(" "), _vm._m(7)])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.dataInventario.custodio[0].nombreDependencia))])])])])])])]), _vm._v(" "), _vm._m(7)])])]), _vm._v(" "), _c('div', {
     staticClass: "modal fade",
     attrs: {
       "id": "modal-upload"
@@ -42707,8 +42716,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('vue-clip', {
     attrs: {
       "options": _vm.options,
+      "on-complete": _vm.onComplete,
       "on-added-file": _vm.fileAdded,
-      "onSending": _vm.onSending
+      "on-sending": _vm.onSending
     },
     scopedSlots: _vm._u([
       ["clip-uploader-action", function(params) {

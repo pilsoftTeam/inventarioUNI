@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     //Inventario
     Route::post('/file/upload', 'InventarioController@manageFiles');
     Route::post('/file/remove', 'InventarioController@deleteFiles');
+    Route::post('/upload/inventario', 'InventarioController@endInventario');
 
     //Custodios
     Route::get('/get/custodios', 'CustodiosController@index');

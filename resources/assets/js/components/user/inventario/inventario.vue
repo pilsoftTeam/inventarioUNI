@@ -79,7 +79,7 @@
                                     <button class="btn text-center center-block"
                                             data-toggle="modal"
                                             href="#modal-upload"
-                                            @click="setUpload(item.fileList)"
+                                            @click="setUpload(item.fileList, key + 1)"
                                             title=" Subir una foto">
                                         <i class="fa fa-picture-o"></i>
                                     </button>
@@ -170,10 +170,10 @@
                                         <td class="text-center">{{dataInventario.pabellon}}</td>
                                         <td class="text-center">{{dataInventario.piso}}</td>
                                         <td class="text-center">{{dataInventario.codigoUbicacion}}</td>
-                                        <td class="text-center">{{dataInventario.custodio.rut}}</td>
-                                        <td class="text-center">{{dataInventario.custodio.nombre}}</td>
-                                        <td class="text-center">{{dataInventario.custodio.unidad}}</td>
-                                        <td class="text-center">{{dataInventario.custodio.nombreDependencia}}</td>
+                                        <td class="text-center">{{dataInventario.custodio[0].rut}}</td>
+                                        <td class="text-center">{{dataInventario.custodio[0].nombre}}</td>
+                                        <td class="text-center">{{dataInventario.custodio[0].unidad}}</td>
+                                        <td class="text-center">{{dataInventario.custodio[0].nombreDependencia}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -240,8 +240,10 @@
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <vue-clip :options="options" :on-added-file="fileAdded"
-                                  :onSending="onSending">
+                        <vue-clip :options="options"
+                                  :on-complete="onComplete"
+                                  :on-added-file="fileAdded"
+                                  :on-sending="onSending">
                             <template slot="clip-uploader-action" scope="params">
                                 <div :class="{'is-dragging': params.dragging}">
                                     <div class="dz-message ">
@@ -254,8 +256,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
-
     </div>
 </template>
 <style>
@@ -307,6 +307,7 @@
                 }],
 
                 selectedFileList: '',
+                selectedIndex: '',
                 options: {
                     url: 'api/file/upload',
                     paramName: 'file',
@@ -325,30 +326,24 @@
             }
         },
         methods: {
-
-
-            setUpload(fileList){
-                this.selectedFileList = fileList
+            setUpload(fileList, index){
+                this.selectedFileList = fileList;
+                this.selectedIndex = index;
             },
             onSending(file, xhr, formData){
-                // JSON.stringify(JSON.parse(this.dataInventario))
-                formData.append('dataInventario', JSON.stringify(this.dataInventario))
+                let dataInventario = this.dataInventario;
+                dataInventario.index = this.selectedIndex;
+                formData.append('dataInventario', JSON.stringify(dataInventario))
             },
             fileAdded(file){
-                this.selectedFileList.push(file)
+                this.selectedFileList.push(file);
             },
             removeFile(index, file){
                 if (index > -1) {
                     this.selectedFileList.splice(index, 1);
                     let formData = this.dataInventario;
-                    formData.filename = file.name
-                    axios.post('api/file/remove', formData).then(r => {
-                        console.log(r)
-                    }).catch(e => {
-                        console.log(e)
-                    })
-
-
+                    formData.filename = file.name;
+                    axios.post('api/file/remove', formData).then().catch()
                 }
             },
             pushItem(){
@@ -378,8 +373,17 @@
             sizeOfFile(bytes){
                 return filesize(bytes)
             },
-
-
+            onComplete(file, status, xhr){
+                this.selectedFileList.ruta = xhr;
+            },
+            uploadInventario(){
+                const items = this.items;
+                axios.post('api/upload/inventario', items).then(r => {
+                    console.log(r)
+                }).catch(e => {
+                    console.log(e)
+                })
+            }
         },
         computed: {}
 

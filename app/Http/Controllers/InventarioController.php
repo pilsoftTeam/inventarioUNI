@@ -16,21 +16,26 @@ class InventarioController extends Controller
          * Se opto por un nombre corto para no dañar el layout del editor
          */
         $i = json_decode($request->dataInventario);
-        $ruta = $i->sede . '/' . $i->campus . '/' . $i->pabellon . '/' . $i->piso . '/' . $i->codigoUbicacion;
+        $ruta = $i->sede . '/' . $i->campus . '/' . $i->pabellon . '/' . $i->piso . '/' . $i->codigoUbicacion . '/' . $i->index;
         Storage::makeDirectory($ruta);
         $fileName = $request->file->getClientOriginalName();
         $request->file->storeAs($ruta, $fileName);
 
-        return response()->json([], 201);
+        return response()->json($ruta, 201);
     }
 
 
     public function deleteFiles(Request $request)
     {
         $i = $request->all();
-        $ruta = $i['sede'] . '/' . $i['campus'] . '/' . $i['pabellon'] . '/' . $i['piso'] . '/' . $i['codigoUbicacion'];
+        $ruta = $i['sede'] . '/' . $i['campus'] . '/' . $i['pabellon'] . '/' . $i['piso'] . '/' . $i['codigoUbicacion'] . '/' . $i['index'];
         Storage::delete($ruta . '/' . $i['filename']);
         return response()->json([], 200);
+    }
+
+    public function endInventario(Request $request)
+    {
+        return response()->json($request->all(), 201);
     }
 
 }

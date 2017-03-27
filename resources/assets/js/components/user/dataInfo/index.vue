@@ -40,8 +40,6 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div v-if="custodio">
-
-
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <h4 class="text-center">Datos del custodio</h4>
                         <hr>
@@ -56,10 +54,10 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td class="text-center">{{custodio.rut}}</td>
-                                <td class="text-center">{{custodio.nombre}}</td>
-                                <td class="text-center">{{custodio.unidad}}</td>
-                                <td class="text-center">{{custodio.nombreDependencia}}</td>
+                                <td class="text-center">{{custodio[0].rut}}</td>
+                                <td class="text-center">{{custodio[0].nombre}}</td>
+                                <td class="text-center">{{custodio[0].unidad}}</td>
+                                <td class="text-center">{{custodio[0].nombreDependencia}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -113,7 +111,8 @@
                 this.beforeCall = true;
                 if (this.rutCustodio) {
                     axios.get('api/get/custodio/' + this.rutCustodio).then(r => {
-                        if (r.data.length === 0) {
+                        if (r.data.length == 0) {
+                            this.custodio = '';
                             this.wrongCall = true;
                             this.beforeCall = false;
                             setTimeout(function () {

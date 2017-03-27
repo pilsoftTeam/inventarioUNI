@@ -14,7 +14,7 @@ class CustodiosController extends Controller
 
     public function search($rut)
     {
-        $rutCustodio = Custodios::where('rut', $rut)->first();
+        $rutCustodio = Custodios::where('rut', $rut)->get();
         return response()->json($rutCustodio, 200);
     }
 
