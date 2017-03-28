@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\InfoInventario;
+use App\ItemsInventario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class InventarioController extends Controller
 {
+
     public function manageFiles(Request $request)
     {
         /*
@@ -24,7 +28,6 @@ class InventarioController extends Controller
         return response()->json($ruta, 201);
     }
 
-
     public function deleteFiles(Request $request)
     {
         $i = $request->all();
@@ -35,7 +38,31 @@ class InventarioController extends Controller
 
     public function endInventario(Request $request)
     {
-        return response()->json($request->all(), 201);
+        $infoInventario = new InfoInventario();
+        $infoInventario->idRevisor = Auth::user()->id;
+        $infoInventario->idCampus = $request->data['campus'];
+        $infoInventario->idCustodio = $request->data['custodio'][0]['id'];
+        $infoInventario->numeroPabellon = $request->data['pabellon'];
+        $infoInventario->numeroPiso = $request->data['piso'];
+        $infoInventario->save();
+        $idInfoInventario = $infoInventario->id;
+
+        foreach ($request->items as $index => $item) {
+            $items = new ItemsInventario();
+            $items->idInfoInventario = $idInfoInventario;
+            $items->codigoAnterior = $item['codigo']['anterior'];
+            $items->codigoNuevo = $item['codigo']['nuevo'];
+            $items->descripcion = $item['detalles']['descripcion'];
+            $items->marca = $item['detalles']['marca'];
+            $items->modelo = $item['detalles']['modelo'];
+            $items->numeroSerie = $item['detalles']['numeroSerie'];
+            $items->rutaImagen = $item['rutaArchivo'];
+            $items->estado = $item['estado'];
+            $items->comentario = $item['comentario'];
+            $items->save();
+
+        }
+        return response()->json([], 201);
     }
 
 }

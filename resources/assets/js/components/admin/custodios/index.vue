@@ -4,7 +4,8 @@
 
         <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: solid 1px lightgrey">
-                <form action="" method="post" role="form" @submit.prevent="saveCustodios">
+                <form action="" method="post" role="form" @submit.prevent="saveCustodios('form-1')"
+                      data-vv-scope="form-1">
                     <h4 class="text-center">Mantenedor custodios</h4>
 
                     <div class="form-group">
@@ -104,64 +105,70 @@
 
         <div class="modal fade" id="modalEditar">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Edicion de custodios</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="form-group">
-                                    <label>Rut :</label>
-                                    <input v-validate="'required|numeric|min:7|max:9'"
-                                           class="form-control"
-                                           v-model="editCustodio.rut"
-                                           :class="{'input': true, 'is-danger': errors.has('rut') }"
-                                           name="rut"
-                                           type="text"
-                                           placeholder="Rut sin digito verificador ni guion">
-                                    <span v-show="errors.has('rut')"
-                                          class="help danger text-center">{{errors.first('rut')}}</span>
-                                </div>
-                                <div class="form-group">
-                                    <label>Nombre :</label>
-                                    <input type="text"
-                                           v-validate="'required|alpha_spaces'"
-                                           :class="{'input': true, 'is-danger': errors.has('nombre') }"
-                                           v-model="editCustodio.nombre"
-                                           class="form-control"
-                                           name="nombre"
-                                           placeholder="Escriba aca .....">
-                                    <span v-show="errors.has('nombre')" class="help danger text-center">{{errors.first('nombre')}}</span>
-                                </div>
-                                <div class="form-group">
-                                    <label>Unidad :</label>
-                                    <input type="text"
-                                           v-model="editCustodio.unidad"
-                                           class="form-control"
-                                           placeholder="Escriba aca .....">
-                                </div>
-                                <div class="form-group">
-                                    <label>Nombre Dependencia :</label>
-                                    <input type="text"
-                                           v-model="editCustodio.nombreDependencia"
-                                           class="form-control"
-                                           placeholder="Escriba aca .....">
+                <form action="" method="post" role="form" @submit.prevent="edit('form-2')"
+                      data-vv-scope="form-2">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Edicion de custodios</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+
+                                    <div class="form-group">
+                                        <label>Rut :</label>
+                                        <input v-validate="'required|numeric|min:7|max:9'"
+                                               class="form-control"
+                                               v-model="editCustodio.rut"
+                                               :class="{'input': true, 'is-danger': errors.has('rut') }"
+                                               name="editRut"
+                                               type="text"
+                                               placeholder="Rut sin digito verificador ni guion">
+                                        <span v-show="errors.has('rut')"
+                                              class="help danger text-center">{{errors.first('rut')}}</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nombre :</label>
+                                        <input type="text"
+                                               v-validate="'required|alpha_spaces'"
+                                               :class="{'input': true, 'is-danger': errors.has('nombre') }"
+                                               v-model="editCustodio.nombre"
+                                               class="form-control"
+                                               name="editnombre"
+                                               placeholder="Escriba aca .....">
+                                        <span v-show="errors.has('nombre')" class="help danger text-center">{{errors.first('nombre')}}</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Unidad :</label>
+                                        <input type="text"
+                                               v-model="editCustodio.unidad"
+                                               class="form-control"
+                                               placeholder="Escriba aca .....">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nombre Dependencia :</label>
+                                        <input type="text"
+                                               v-model="editCustodio.nombreDependencia"
+                                               class="form-control"
+                                               placeholder="Escriba aca .....">
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default">Cerrar</button>
+                            <button type="submit"
+                                    class="btn btn-warning">
+                                Guardar Cambios
+                            </button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default">Cerrar</button>
-                        <button type="button" @click="edit"
-                                class="btn btn-warning"
-                                data-dismiss="modal">
-                            Guardar Cambios
-                        </button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
+                </form>
+            </div>
         </div>
 
 
@@ -235,8 +242,8 @@
                     console.log(e)
                 })
             },
-            saveCustodios(){
-                this.$validator.validateAll().then(() => {
+            saveCustodios(scope){
+                this.$validator.validateAll(scope).then(() => {
                     axios.post('api/create/custodio', this.newCustodio).then(r => {
                         this.newCustodio.rut = '';
                         this.newCustodio.nombre = '';
@@ -264,13 +271,16 @@
                 }
             },
 
-            edit(){
-                axios.put('api/edit/custodio', this.editCustodio).then(r => {
-                    this.getCustodios();
-                    $('#modalEditar').modal('hide')
-                }).catch(e => {
-                    console.log(e)
+            edit(scope){
+                this.$validator.validateAll(scope).then(() => {
+                    axios.put('api/edit/custodio', this.editCustodio).then(r => {
+                        this.getCustodios();
+                        $('#modalEditar').modal('hide')
+                    }).catch(e => {
+                        console.log(e)
+                    });
                 });
+
             },
             erase(){
                 axios.delete('api/delete/custodio/' + this.deleteCustodio).then(r => {

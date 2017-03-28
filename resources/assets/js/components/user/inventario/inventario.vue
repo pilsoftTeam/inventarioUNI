@@ -79,7 +79,7 @@
                                     <button class="btn text-center center-block"
                                             data-toggle="modal"
                                             href="#modal-upload"
-                                            @click="setUpload(item.fileList, key + 1)"
+                                            @click="setUpload(item.rutaArchivo,item.fileList, key + 1)"
                                             title=" Subir una foto">
                                         <i class="fa fa-picture-o"></i>
                                     </button>
@@ -92,8 +92,9 @@
                                         <option value="regular">Regular</option>
                                     </select>
                                 </td>
-                                <td colspan="2" v-model="item.comentario">
+                                <td colspan="2">
                                     <input type="text"
+                                           v-model="item.comentario"
                                            class="form-control input-sm">
                                 </td>
 
@@ -123,13 +124,24 @@
                         <div class="btn-group pull-right">
                             <button type="button"
                                     class="btn btn-primary"
+                                    @mouseover="showAddRowMessage = true"
+                                    @mouseleave="showAddRowMessage = false"
                                     @click="pushItem"
                                     title="Agregar una fila al final">
+                                <span class="animated fadeInLeft" v-if="showAddRowMessage">
+                                   <b>Agregar una nueva fila</b>
+                                </span>
                                 <i class="fa fa-plus"></i>
                             </button>
                             <button type="button"
-                                    class="btn btn-success"
+                                    @mouseover="showEndInventarioMessage = true"
+                                    @mouseleave="showEndInventarioMessage = false"
+                                    data-toggle="modal" href="#modalEndInventario"
+                                    class="btn btn-success animated"
                                     title="Terminar inventario">
+                                <span class="animated fadeInLeft" v-if="showEndInventarioMessage">
+                                    <b>Terminar Inventario</b>
+                                </span>
                                 <i class="fa fa-check"></i>
                             </button>
                         </div>
@@ -185,7 +197,7 @@
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+        </div>
 
 
         <div class="modal fade" id="modal-upload">
@@ -212,7 +224,7 @@
                                 <td class="text-center" colspan="3">
                                     <img style="margin: 0 auto"
                                          :src="file.dataUrl"
-                                         class="img img-circle img-responsive"
+                                         class="img img-bordered img-responsive"
                                          width="50"
                                          height="50">
                                 </td>
@@ -255,7 +267,34 @@
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
+        </div>
+
+
+        <div class="modal fade" id="modalEndInventario">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Terminar inventario</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h4 class="text-center">¿ Esta seguro que desea terminar este inventario ?</h4>
+                                <br>
+                                <button class="btn btn-success btn-block" @click="uploadInventario">
+                                    Terminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+
     </div>
 </template>
 <style>
@@ -287,6 +326,7 @@
 </style>
 <script>
     import filesize from 'filesize'
+    import _ from 'lodash'
     export default {
         data () {
             return {
@@ -302,12 +342,13 @@
                         numeroSerie: ''
                     },
                     fileList: [],
+                    rutaArchivo: '',
                     estado: '',
                     comentario: ''
                 }],
-
                 selectedFileList: '',
                 selectedIndex: '',
+                selectedRuta: '',
                 options: {
                     url: 'api/file/upload',
                     paramName: 'file',
@@ -315,7 +356,9 @@
                         'X-CSRF-TOKEN': window.Laravel.csrfToken,
                         'X-Requested-With': 'XMLHttpRequest',
                     }
-                }
+                },
+                showAddRowMessage: false,
+                showEndInventarioMessage: false
 
             }
         },
@@ -326,7 +369,8 @@
             }
         },
         methods: {
-            setUpload(fileList, index){
+            setUpload(ruta, fileList, index){
+                this.selectedRuta = ruta;
                 this.selectedFileList = fileList;
                 this.selectedIndex = index;
             },
@@ -359,6 +403,7 @@
                         numeroSerie: ''
                     },
                     fileList: [],
+                    rutaArchivo: '',
                     estado: '',
                     comentario: ''
                 };
@@ -374,16 +419,30 @@
                 return filesize(bytes)
             },
             onComplete(file, status, xhr){
-                this.selectedFileList.ruta = xhr;
+                //this.selectedRuta = JSON.parse(xhr.response);
             },
             uploadInventario(){
-                const items = this.items;
-                axios.post('api/upload/inventario', items).then(r => {
-                    console.log(r)
+                let a = _.forEach(this.items, i => {
+                    _.forEach(i.fileList, f => {
+                        if (f.xhrResponse.statusCode === 201) {
+                            i.rutaArchivo = JSON.parse(f.xhrResponse.response)
+                        }
+                    });
+                    delete i.fileList
+                });
+
+                let inventario = {
+                    data: this.dataInventario,
+                    items: a
+                };
+                axios.post('api/upload/inventario', inventario).then(r => {
+                    console.log(r.data)
                 }).catch(e => {
                     console.log(e)
                 })
-            }
+            },
+
+
         },
         computed: {}
 

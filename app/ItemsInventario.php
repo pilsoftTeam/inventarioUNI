@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ItemsInventario extends Model
 {
-    //
+    protected $table = 'items_inventarios';
 }
