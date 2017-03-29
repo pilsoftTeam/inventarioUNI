@@ -44,6 +44,7 @@ class InventarioController extends Controller
         $infoInventario->idCustodio = $request->data['custodio'][0]['id'];
         $infoInventario->numeroPabellon = $request->data['pabellon'];
         $infoInventario->numeroPiso = $request->data['piso'];
+        $infoInventario->codigoUbicacion = $request->data['codigoUbicacion'];
         $infoInventario->save();
         $idInfoInventario = $infoInventario->id;
 

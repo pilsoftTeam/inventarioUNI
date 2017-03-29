@@ -23,6 +23,7 @@ class CreateInfoInventariosTable extends Migration
             $table->foreign('idCustodio')->references('id')->on('custodios');
             $table->integer('numeroPabellon');
             $table->integer('numeroPiso');
+            $table->string('codigoUbicacion');
             $table->timestamps();
         });
     }

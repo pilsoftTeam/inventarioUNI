@@ -2,9 +2,13 @@
     <div>
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquid animi delectus doloremque
-                vero. Autem dignissimos dolorum ea, ex provident voluptatibus. Ad amet, dolore iste libero nam provident
-                sint vero.
+                <br>
+                <br>
+                <br>
+                <a class="btn text-center-center btn-success"
+                   href="dump/database" target="_blank">
+                    Volcar la base de datos a excel
+                </a>
             </div>
         </div>
     </div>
@@ -15,6 +19,7 @@
             return {
                 msg: 'Hello world!'
             }
-        }
+        },
+        methods: {}
     }
 </script>

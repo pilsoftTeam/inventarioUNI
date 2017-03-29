@@ -31,5 +31,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('/edit/custodio', 'CustodiosController@edit');
     Route::delete('/delete/custodio/{id}', 'CustodiosController@delete');
 
+    //Validacion
+
+    Route::get('/validar/codigo/ubicacion/{ubicacion}', 'RevisorController@searchCodigoUbicacion');
+
+    //Utils
+
 
 });

@@ -28,3 +28,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/inicio', 'HomeController@index');
+Route::get('/dump/database', 'UtilsController@DBDump');

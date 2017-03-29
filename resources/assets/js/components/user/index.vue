@@ -63,14 +63,17 @@
 
 
             </div>
-            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <div class="col-xs-18 col-sm-8 col-md-8 col-lg-8">
                 <div class="panel panel-default" v-if="showComponent">
                     <div class="panel-body">
                         <info :dataInventario="data" :names="names" @custodio="datosCustodio"></info>
                     </div>
                 </div>
                 <div v-else>
-                    <h3 class="text-center" style="margin-top: 25%">Por favor llene los items</h3>
+                    <h1 class="text-center"
+                        style="margin-top: 25%">
+                        Por favor llene los items
+                    </h1>
                 </div>
             </div>
         </div>
@@ -110,8 +113,11 @@
                 },
                 selectedCampus: '',
                 showComponent: false,
+
+
                 init: true,
                 inventario: false
+
 
             }
         },
@@ -155,14 +161,26 @@
             },
 
             next(){
+                if (this.data.codigoUbicacion) {
+                    axios.get('api/validar/codigo/ubicacion/' + this.data.codigoUbicacion).then(r => {
+                        if (!r.data.codigoUbicacion) {
+                            _.forEach(this.campus.get_campus, c => {
+                                if (c.id == this.data.campus) {
+                                    this.names.campus = c.campus;
+                                }
+                            });
+                            this.names.sede = this.campus.sede;
+                            this.showComponent = true;
+                        } else {
+                            alert('El codigo de ubicacion ingresado,  ya se encuentra en nuestra base de datos. Por favor intentelo nuevamente con otro codigo')
+                        }
+                    }).catch(e => {
+                        console.log(e)
+                    });
+                } else {
+                    return false
+                }
 
-                _.forEach(this.campus.get_campus, c => {
-                    if (c.id == this.data.campus) {
-                        this.names.campus = c.campus;
-                    }
-                });
-                this.names.sede = this.campus.sede;
-                this.showComponent = true;
             },
 
             datosCustodio(payload){

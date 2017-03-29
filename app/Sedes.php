@@ -12,4 +12,5 @@ class Sedes extends Model
     {
         return $this->hasMany('App\Campus', 'idSede', 'id');
     }
+
 }

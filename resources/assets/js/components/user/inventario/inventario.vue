@@ -8,112 +8,116 @@
                 <br>
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th class="text-center borderRight" colspan="2">
-                                    Codigo
-                                </th>
-                                <th class="text-center borderLeft borderRight" colspan="5">
-                                    Detalles del bien
-                                </th>
-                                <th class="text-center borderLeft" colspan="4">
-                                    Observaciones del bien
-                                </th>
-                                <th class="text-center borderLeft" colspan="2">
-                                    Opciones
-                                </th>
-                            </tr>
-                            </thead>
-                            <thead>
-                            <tr>
-                                <th class="text-center borderRight">#</th>
-                                <th class="text-center">Anterior</th>
-                                <th class="text-center borderRight">Nuevo</th>
-                                <th class="text-center" colspan="2">Descripcion</th>
-                                <th class="text-center">Marca</th>
-                                <th class="text-center">Modelo</th>
-                                <th class="text-center borderRight">Numero serie</th>
-                                <th class="text-center">Foto</th>
-                                <th class="text-center">Estado</th>
-                                <th class="text-center borderRight" colspan="2">Comentario</th>
-                                <th class="text-center">Vista previa</th>
-                                <th class="text-center">Eliminar fila</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(item, key) in items">
-                                <td class="text-center">{{key + 1}}</td>
-                                <td>
-                                    <input type="text"
-                                           v-model="item.codigo.anterior"
-                                           class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                           v-model="item.codigo.nuevo"
-                                           class="form-control input-sm">
-                                </td>
-                                <td colspan="2">
-                                    <input type="text"
-                                           v-model="item.detalles.descripcion"
-                                           class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                           v-model="item.detalles.marca"
-                                           class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                           v-model="item.detalles.modelo"
-                                           class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                           v-model="item.detalles.numeroSerie"
-                                           class="form-control input-sm">
-                                </td>
-                                <td>
-                                    <button class="btn text-center center-block"
-                                            data-toggle="modal"
-                                            href="#modal-upload"
-                                            @click="setUpload(item.rutaArchivo,item.fileList, key + 1)"
-                                            title=" Subir una foto">
-                                        <i class="fa fa-picture-o"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <select class="form-control input-sm" v-model="item.estado">
-                                        <option value="">Elija</option>
-                                        <option value="bueno">Bueno</option>
-                                        <option value="malo">Malo</option>
-                                        <option value="regular">Regular</option>
-                                    </select>
-                                </td>
-                                <td colspan="2">
-                                    <input type="text"
-                                           v-model="item.comentario"
-                                           class="form-control input-sm">
-                                </td>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center borderRight" colspan="2">
+                                        Codigo
+                                    </th>
+                                    <th class="text-center borderLeft borderRight" colspan="5">
+                                        Detalles del bien
+                                    </th>
+                                    <th class="text-center borderLeft" colspan="4">
+                                        Observaciones del bien
+                                    </th>
+                                    <th class="text-center borderLeft" colspan="2">
+                                        Opciones
+                                    </th>
+                                </tr>
+                                </thead>
+                                <thead>
+                                <tr>
+                                    <th class="text-center borderRight">#</th>
+                                    <th class="text-center">Anterior</th>
+                                    <th class="text-center borderRight">Nuevo</th>
+                                    <th class="text-center" colspan="2">Descripcion</th>
+                                    <th class="text-center">Marca</th>
+                                    <th class="text-center">Modelo</th>
+                                    <th class="text-center borderRight">Numero serie</th>
+                                    <th class="text-center">Foto</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center borderRight" colspan="2">Comentario</th>
+                                    <th class="text-center">Vista previa</th>
+                                    <th class="text-center">Eliminar fila</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item, key) in items">
+                                    <td class="text-center">{{key + 1}}</td>
+                                    <td>
+                                        <input type="text"
+                                               v-model="item.codigo.anterior"
+                                               class="form-control input-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               v-model="item.codigo.nuevo"
+                                               class="form-control input-sm">
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text"
+                                               v-model="item.detalles.descripcion"
+                                               class="form-control input-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               v-model="item.detalles.marca"
+                                               class="form-control input-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               v-model="item.detalles.modelo"
+                                               class="form-control input-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               v-model="item.detalles.numeroSerie"
+                                               class="form-control input-sm">
+                                    </td>
+                                    <td>
+                                        <button class="btn text-center center-block"
+                                                data-toggle="modal"
+                                                href="#modal-upload"
+                                                @click="setUpload(item.rutaArchivo,item.fileList, key + 1)"
+                                                title=" Subir una foto">
+                                            <i class="fa fa-picture-o"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <select class="form-control input-sm" v-model="item.estado">
+                                            <option value="">Elija</option>
+                                            <option value="bueno">Bueno</option>
+                                            <option value="malo">Malo</option>
+                                            <option value="regular">Regular</option>
+                                        </select>
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text"
+                                               v-model="item.comentario"
+                                               class="form-control input-sm">
+                                    </td>
 
-                                <td>
-                                    <button class="btn btn-info text-center center-block"
-                                            title="Previsualizar esta fila">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger text-center center-block"
-                                            @click="deleteRow(key)"
-                                            title="Eliminar fila">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    <td>
+                                        <button class="btn btn-info text-center center-block"
+                                                data-toggle="modal" href="#modalPreview"
+                                                @click="previewRow(item)"
+                                                title="Previsualizar esta fila">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger text-center center-block"
+                                                @click="deleteRow(key)"
+                                                title="Eliminar fila">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <hr>
 
                         <a class="btn btn-warning pull-left"
@@ -198,8 +202,52 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
+        <div class="modal fade" id="modalPreview">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Vista previa de la fila</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <ul class="list-group" v-if="preview">
+                                    <li class="list-group-item">
+                                        <b>Codigo Anterior : </b> <span>{{preview.codigo.anterior}}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Codigo Nuevo : </b> <span>{{preview.codigo.nuevo}}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Descripcion : </b> <span>{{preview.detalles.descripcion}}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Marca : </b> <span>{{preview.detalles.marca}}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Modelo : </b> <span>{{preview.detalles.modelo}}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Numero Serie : </b> <span>{{preview.detalles.numeroSerie}}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Estado : </b> <span>{{preview.estado}}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Comentario : </b> <span>{{preview.comentario}}</span>
+                                    </li>
+                                </ul>
 
-
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         <div class="modal fade" id="modal-upload">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -268,8 +316,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
-
-
         <div class="modal fade" id="modalEndInventario">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -281,6 +327,9 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <h4 class="text-center">¿ Esta seguro que desea terminar este inventario ?</h4>
+                                <p class="text-center">
+                                    <small>Al hacer click en el boton la pagina se recargara</small>
+                                </p>
                                 <br>
                                 <button class="btn btn-success btn-block" @click="uploadInventario">
                                     Terminar
@@ -349,6 +398,7 @@
                 selectedFileList: '',
                 selectedIndex: '',
                 selectedRuta: '',
+                preview: '',
                 options: {
                     url: 'api/file/upload',
                     paramName: 'file',
@@ -421,6 +471,10 @@
             onComplete(file, status, xhr){
                 //this.selectedRuta = JSON.parse(xhr.response);
             },
+
+            previewRow(item){
+                this.preview = item;
+            },
             uploadInventario(){
                 let a = _.forEach(this.items, i => {
                     _.forEach(i.fileList, f => {
@@ -436,7 +490,7 @@
                     items: a
                 };
                 axios.post('api/upload/inventario', inventario).then(r => {
-                    console.log(r.data)
+                    r.status === 201 ? location.reload() : false
                 }).catch(e => {
                     console.log(e)
                 })
