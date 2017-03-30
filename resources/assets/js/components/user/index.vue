@@ -30,7 +30,9 @@
                             <label class="control-label">Pabellon</label>
                             <select class="form-control" v-model="data.pabellon">
                                 <option value=""> -- Seleccione --</option>
-                                <option :value="key" v-for="(key, item) in pabellones.pabellones">
+
+                                <option v-for="(key, item) in pabellones.pabellones"
+                                        :value="key">
                                     {{ pabellones.campus }} -- Pabellon {{ key }}
                                 </option>
                             </select>
@@ -96,6 +98,10 @@
         data () {
             return {
                 sedes: '',
+                sedesHechas: '',
+
+                selector: [],
+
                 campus: '',
                 pabellones: '',
 
@@ -125,12 +131,12 @@
 
             getDatos(){
                 axios.get('api/get/sedes/informacion').then(r => {
-                    this.sedes = r.data;
+                    this.sedes = r.data[0];
+                    this.sedesHechas = r.data[1];
                 }).catch(e => {
                     console.log(e)
                 })
             },
-
             setCampus(){
                 this.data.campus = '';
                 this.data.pabellon = '';
@@ -143,7 +149,10 @@
                     this.campus = _.find(this.sedes, c => {
                         return c.id == this.data.sede;
                     });
+
                 }
+
+
             },
             setPabellon(){
                 this.data.pabellon = '';
@@ -156,10 +165,14 @@
                             this.pabellones = c;
                         }
                     });
+                    _.forEach(this.sedesHechas, h => {
+                        if (h.idCampus === this.data.campus) {
+                            this.selector.push(h)
+                        }
+                    })
                 }
 
             },
-
             next(){
                 if (this.data.codigoUbicacion) {
                     axios.get('api/validar/codigo/ubicacion/' + this.data.codigoUbicacion).then(r => {
@@ -201,7 +214,7 @@
                         this.data.pabellon &&
                         this.data.codigoUbicacion &&
                         this.data.piso.toString()).length != 0;
-            }
+            },
         },
 
 

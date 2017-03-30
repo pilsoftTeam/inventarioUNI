@@ -37,5 +37,9 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //Utils
 
+    //Usuarios
+
+    Route::get('/get/usuarios', 'UserController@index');
+    Route::get('/get/roles', 'UserController@getRoles');
 
 });

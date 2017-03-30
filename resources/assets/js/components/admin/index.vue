@@ -11,6 +11,11 @@
                     </li>
                     <li>
                         <a href="#tab2" role="tab" data-toggle="tab">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tab3" role="tab" data-toggle="tab">
                             Mantenedor Custodios
                         </a>
                     </li>
@@ -22,6 +27,10 @@
                         <utils></utils>
                     </div>
                     <div class="tab-pane fade" id="tab2">
+                        <br>
+                        <users></users>
+                    </div>
+                    <div class="tab-pane fade" id="tab3">
                         <br>
                         <custodios></custodios>
                     </div>
@@ -35,6 +44,7 @@
 <script>
     import Custodios from './custodios/index.vue'
     import Utils from './utils/index.vue'
+    import Users from './users/index.vue'
     export default {
         data () {
             return {
@@ -42,7 +52,7 @@
             }
         },
         components: {
-            Custodios, Utils
+            Custodios, Utils, Users
         }
     }
 </script>

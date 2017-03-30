@@ -11,8 +11,8 @@ class RevisorController extends Controller
     public function getInformacion()
     {
         $informacion = Sedes::with('getCampus')->get();
-
-        return response()->json($informacion, 200);
+        $sedesHechas = InfoInventario::all();
+        return response()->json([$informacion, $sedesHechas], 200);
     }
 
     public function searchCodigoUbicacion($ubicacion)

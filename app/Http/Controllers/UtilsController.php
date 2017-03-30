@@ -71,8 +71,6 @@ class UtilsController extends Controller
 
                 });
             }
-
-
         })->download('xlsx');
 
     }

@@ -77,7 +77,7 @@
                                                class="form-control input-sm">
                                     </td>
                                     <td>
-                                        <button class="btn text-center center-block"
+                                        <button class="btn text-center  center-block"
                                                 data-toggle="modal"
                                                 href="#modal-upload"
                                                 @click="setUpload(item.rutaArchivo,item.fileList, key + 1)"
