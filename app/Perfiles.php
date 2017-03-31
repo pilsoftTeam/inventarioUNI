@@ -13,5 +13,10 @@ class Perfiles extends Model
         return $this->hasMany('App\User', 'id', 'idUsuario');
     }
 
+    public function getRoles()
+    {
+        return $this->belongsTo('App\Roles', 'idRol', 'id');
+    }
+
 
 }

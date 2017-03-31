@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Inventario',
+    'name' => 'Sistema de Recolección de Información Inventario Físico',
 
     /*
     |--------------------------------------------------------------------------

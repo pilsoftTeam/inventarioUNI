@@ -461,9 +461,14 @@
 
             },
             deleteRow(index){
-                if (index > -1) {
-                    this.items.splice(index, 1);
+
+                let confirmacion = confirm('Sr. Usuario eliminara una fila del formulario. ¿ Esta seguro de realizar esta acción ?');
+                if (confirmacion) {
+                    if (index > -1) {
+                        this.items.splice(index, 1);
+                    }
                 }
+
             },
             sizeOfFile(bytes){
                 return filesize(bytes)

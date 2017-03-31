@@ -15,6 +15,7 @@ class CreateInfoInventariosTable extends Migration
     {
         Schema::create('info_inventarios', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('folio')->unique();
             $table->unsignedInteger('idRevisor');
             $table->foreign('idRevisor')->references('id')->on('usuarios');
             $table->unsignedInteger('idCampus');
@@ -24,6 +25,7 @@ class CreateInfoInventariosTable extends Migration
             $table->integer('numeroPabellon');
             $table->integer('numeroPiso');
             $table->string('codigoUbicacion');
+            $table->string('rutaImagenLayout');
             $table->timestamps();
         });
     }

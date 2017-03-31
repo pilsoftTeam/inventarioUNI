@@ -8,10 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 class InventarioController extends Controller
 {
 
-    public function manageFiles(Request $request)
+    public function manageFilesFromInventory(Request $request)
     {
         /*
          * Orden de las carpetas segun el numero
@@ -20,12 +21,22 @@ class InventarioController extends Controller
          * Se opto por un nombre corto para no dañar el layout del editor
          */
         $i = json_decode($request->dataInventario);
-        $ruta = $i->sede . '/' . $i->campus . '/' . $i->pabellon . '/' . $i->piso . '/' . $i->codigoUbicacion . '/' . $i->index;
+        $ruta = 'inventarios/' . $i->sede . '/' . $i->campus . '/' . $i->pabellon . '/' . $i->piso . '/' . $i->codigoUbicacion . '/' . $i->index;
         Storage::makeDirectory($ruta);
         $fileName = $request->file->getClientOriginalName();
         $request->file->storeAs($ruta, $fileName);
 
         return response()->json($ruta, 201);
+    }
+
+    public function manageFilesFromIndex(Request $request)
+    {
+        $i = json_decode($request->dataInventario);
+        $ruta = 'layouts/' . $i->sede . '/' . $i->campus . '/' . $i->pabellon . '/' . $i->piso . '/' . $i->codigoUbicacion;
+        Storage::makeDirectory($ruta);
+        $fileName = $request->file->getClientOriginalName();
+        $request->file->storeAs($ruta, $fileName);
+
     }
 
     public function deleteFiles(Request $request)
@@ -38,7 +49,15 @@ class InventarioController extends Controller
 
     public function endInventario(Request $request)
     {
+        $last = InfoInventario::orderBy('id', 'desc')->first();
+
+        if ($last['id'] == 1) {
+            $last['id'] = 2;
+        } elseif (!$last) {
+            $last['id'] = 1;
+        }
         $infoInventario = new InfoInventario();
+        $infoInventario->folio = sprintf('%012d', $last['id']);
         $infoInventario->idRevisor = Auth::user()->id;
         $infoInventario->idCampus = $request->data['campus'];
         $infoInventario->idCustodio = $request->data['custodio'][0]['id'];

@@ -20,7 +20,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/get/sedes/informacion', 'RevisorController@getInformacion');
 
     //Inventario
-    Route::post('/file/upload', 'InventarioController@manageFiles');
+    Route::post('/file/upload', 'InventarioController@manageFilesFromInventory');
+    Route::post('/file/layout/upload', 'InventarioController@manageFilesFromIndex');
     Route::post('/file/remove', 'InventarioController@deleteFiles');
     Route::post('/upload/inventario', 'InventarioController@endInventario');
 
@@ -41,5 +42,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('/get/usuarios', 'UserController@index');
     Route::get('/get/roles', 'UserController@getRoles');
+    Route::post('/add/user', 'UserController@save');
 
 });
