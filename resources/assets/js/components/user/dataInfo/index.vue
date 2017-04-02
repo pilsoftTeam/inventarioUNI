@@ -91,9 +91,13 @@
                                     <tr>
                                         <td class="text-center">
                                             {{fileList.name}}
+
+
                                         </td>
                                         <td class="text-center" v-if="fileList.size">
                                             {{sizeOfFile(fileList.size)}}
+
+
                                         </td>
                                         <td class="text-center" v-if="fileList.status === 'error'">
                                             <span class="label label-danger">Error en la subida</span>
@@ -139,6 +143,8 @@
                     <div class="alert alert-danger fade in" v-if="wrongCall">
                         <strong>Error : </strong> El rut <b>{{rutCustodio}}</b> no existe en la base de datos. Intente
                         nuevamente
+
+
                     </div>
                 </div>
 
@@ -236,7 +242,13 @@
 
             },
             empezar(){
-                this.$emit('custodio', this.custodio)
+
+                let obj = {
+                    custodio: this.custodio,
+                    file: this.fileList
+                };
+
+                this.$emit('custodio', obj)
             }
         }
     }

@@ -37,6 +37,8 @@ class InventarioController extends Controller
         $fileName = $request->file->getClientOriginalName();
         $request->file->storeAs($ruta, $fileName);
 
+        return response()->json($ruta, 201);
+
     }
 
     public function deleteFiles(Request $request)
@@ -64,6 +66,7 @@ class InventarioController extends Controller
         $infoInventario->numeroPabellon = $request->data['pabellon'];
         $infoInventario->numeroPiso = $request->data['piso'];
         $infoInventario->codigoUbicacion = $request->data['codigoUbicacion'];
+        $infoInventario->rutaImagenLayout = $request->data['rutaImagenLayout'];
         $infoInventario->save();
         $idInfoInventario = $infoInventario->id;
 

@@ -15,15 +15,27 @@
                                     <th></th>
                                     <th class="text-center borderRight" colspan="2">
                                         Codigo
+
+
+
                                     </th>
                                     <th class="text-center borderLeft borderRight" colspan="5">
                                         Detalles del bien
+
+
+
                                     </th>
                                     <th class="text-center borderLeft" colspan="4">
                                         Observaciones del bien
+
+
+
                                     </th>
                                     <th class="text-center borderLeft" colspan="2">
                                         Opciones
+
+
+
                                     </th>
                                 </tr>
                                 </thead>
@@ -278,9 +290,15 @@
                                 </td>
                                 <td class="text-center">
                                     {{file.name}}
+
+
+
                                 </td>
                                 <td class="text-center" v-if="file.size">
                                     {{sizeOfFile(file.size)}}
+
+
+
                                 </td>
                                 <td class="text-center" v-if="file.status === 'error'">
                                     <span class="label label-danger">Error en la subida</span>
@@ -333,6 +351,9 @@
                                 <br>
                                 <button class="btn btn-success btn-block" @click="uploadInventario">
                                     Terminar
+
+
+
                                 </button>
                             </div>
                         </div>
@@ -495,6 +516,7 @@
                     items: a
                 };
                 axios.post('api/upload/inventario', inventario).then(r => {
+                    console.log(r.data);
                     r.status === 201 ? location.reload() : false
                 }).catch(e => {
                     console.log(e)

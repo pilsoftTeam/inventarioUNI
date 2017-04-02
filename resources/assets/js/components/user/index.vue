@@ -2,8 +2,6 @@
     <div>
         <div v-if="init">
             <div class="col-xs-18 col-sm-4 col-md-4 col-lg-4">
-
-
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h4 class="text-center">Información de ubicación</h4>
@@ -31,9 +29,10 @@
                             <select class="form-control" v-model="data.pabellon">
                                 <option value=""> -- Seleccione --</option>
 
-                                <option v-for="(key, item) in pabellones.pabellones"
+                                <option v-for="(key , item) in pabellones.pabellones"
                                         :value="key">
                                     {{ pabellones.campus }} -- Pabellon {{ key }}
+
                                 </option>
                             </select>
                         </div>
@@ -46,8 +45,6 @@
                                 </option>
                             </select>
                         </div>
-
-
                         <div class="form-group">
                             <label class="control-label">Codigo de ubicacion</label>
                             <input type="text"
@@ -55,8 +52,6 @@
                                    class="form-control"
                                    placeholder="Escriba aca">
                         </div>
-
-
                         <button class="btn btn-block btn-info" @click="next" :disabled="!showInfoComponent">
                             Siguiente
                         </button>
@@ -111,7 +106,8 @@
                     pabellon: '',
                     piso: '',
                     codigoUbicacion: '',
-                    custodio: ''
+                    custodio: '',
+                    file: ''
                 },
                 names: {
                     sede: '',
@@ -198,7 +194,8 @@
 
             datosCustodio(payload){
                 if (payload) {
-                    this.data.custodio = payload;
+                    this.data.custodio = payload.custodio;
+                    this.data.rutaImagenLayout = payload.file.xhrResponse.response ? JSON.parse(payload.file.xhrResponse.response) : null;
                     this.init = false;
                     this.inventario = true;
                 }
