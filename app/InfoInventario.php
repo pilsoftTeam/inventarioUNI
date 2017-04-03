@@ -22,4 +22,9 @@ class InfoInventario extends Model
     {
         return $this->hasMany('App\ItemsInventario', 'idInfoInventario', 'id');
     }
+
+    public function getRevisor()
+    {
+        return $this->hasOne('App\User', 'id', 'idRevisor');
+    }
 }

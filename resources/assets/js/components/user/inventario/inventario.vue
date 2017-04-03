@@ -17,11 +17,9 @@
                                         Codigo
 
 
-
                                     </th>
                                     <th class="text-center borderLeft borderRight" colspan="5">
                                         Detalles del bien
-
 
 
                                     </th>
@@ -29,11 +27,9 @@
                                         Observaciones del bien
 
 
-
                                     </th>
                                     <th class="text-center borderLeft" colspan="2">
                                         Opciones
-
 
 
                                     </th>
@@ -131,12 +127,16 @@
                             </table>
                         </div>
                         <hr>
-
+                        <button class="btn btn-danger pull-left" title="Ir hacia atras" @click="back">
+                            <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                        </button>
                         <a class="btn btn-warning pull-left"
+                           title="Ver datos de este inventario"
                            data-toggle="modal"
                            href="#modal-id">
-                            <i class="fa fa-adjust"></i>
+                            <i class="fa fa-map-o" aria-hidden="true"></i>
                         </a>
+
                         <div class="btn-group pull-right">
                             <button type="button"
                                     class="btn btn-primary"
@@ -292,11 +292,9 @@
                                     {{file.name}}
 
 
-
                                 </td>
                                 <td class="text-center" v-if="file.size">
                                     {{sizeOfFile(file.size)}}
-
 
 
                                 </td>
@@ -351,7 +349,6 @@
                                 <br>
                                 <button class="btn btn-success btn-block" @click="uploadInventario">
                                     Terminar
-
 
 
                                 </button>
@@ -522,6 +519,10 @@
                     console.log(e)
                 })
             },
+
+            back(){
+                this.$emit('back')
+            }
 
 
         },

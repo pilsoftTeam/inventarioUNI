@@ -75,7 +75,7 @@
             </div>
         </div>
         <div v-if="inventario">
-            <inventario :dataInventario="data"></inventario>
+            <inventario :dataInventario="data" @back="back"></inventario>
         </div>
 
 
@@ -107,7 +107,7 @@
                     piso: '',
                     codigoUbicacion: '',
                     custodio: '',
-                    file: ''
+                    rutaImagenLayout: ''
                 },
                 names: {
                     sede: '',
@@ -169,6 +169,12 @@
                 }
 
             },
+
+            back(){
+                this.inventario = false;
+                this.init = true;
+            },
+
             next(){
                 if (this.data.codigoUbicacion) {
                     axios.get('api/validar/codigo/ubicacion/' + this.data.codigoUbicacion).then(r => {
@@ -195,7 +201,11 @@
             datosCustodio(payload){
                 if (payload) {
                     this.data.custodio = payload.custodio;
-                    this.data.rutaImagenLayout = payload.file.xhrResponse.response ? JSON.parse(payload.file.xhrResponse.response) : null;
+                    if (payload.file.xhrResponse) {
+                        this.data.rutaImagenLayout = JSON.parse(payload.file.xhrResponse.response);
+                    } else {
+                        this.data.rutaImagenLayout = null
+                    }
                     this.init = false;
                     this.inventario = true;
                 }

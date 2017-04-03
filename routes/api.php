@@ -38,6 +38,11 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //Utils
 
+    //Revision inventarios
+
+    Route::get('/get/inventarios', 'AdminController@index');
+    Route::get('/get/items/inventario/{id}', 'AdminController@getItems');
+
     //Usuarios
 
     Route::get('/get/usuarios', 'UserController@index');

@@ -91,13 +91,9 @@
                                     <tr>
                                         <td class="text-center">
                                             {{fileList.name}}
-
-
                                         </td>
                                         <td class="text-center" v-if="fileList.size">
                                             {{sizeOfFile(fileList.size)}}
-
-
                                         </td>
                                         <td class="text-center" v-if="fileList.status === 'error'">
                                             <span class="label label-danger">Error en la subida</span>
@@ -242,12 +238,10 @@
 
             },
             empezar(){
-
                 let obj = {
                     custodio: this.custodio,
                     file: this.fileList
                 };
-
                 this.$emit('custodio', obj)
             }
         }

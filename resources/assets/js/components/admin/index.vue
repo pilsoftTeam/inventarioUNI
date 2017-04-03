@@ -19,6 +19,11 @@
                             Mantenedor Custodios
                         </a>
                     </li>
+                    <li>
+                        <a href="#tab4" role="tab" data-toggle="tab">
+                            Inventarios
+                        </a>
+                    </li>
                 </ul>
                 <!-- TAB CONTENT -->
                 <div class="tab-content">
@@ -34,6 +39,10 @@
                         <br>
                         <custodios></custodios>
                     </div>
+                    <div class="tab-pane fade" id="tab4">
+                        <br>
+                        <inventarios></inventarios>
+                    </div>
                 </div>
 
             </div>
@@ -45,14 +54,10 @@
     import Custodios from './custodios/index.vue'
     import Utils from './utils/index.vue'
     import Users from './users/index.vue'
+    import Inventarios from './inventarios/index.vue'
     export default {
-        data () {
-            return {
-                msg: 'Hello world!'
-            }
-        },
         components: {
-            Custodios, Utils, Users
+            Custodios, Utils, Users, Inventarios
         }
     }
 </script>
