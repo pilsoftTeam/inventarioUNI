@@ -10,7 +10,7 @@ class Perfiles extends Model
 
     public function getUsers()
     {
-        return $this->hasMany('App\User', 'id', 'idUsuario');
+        return $this->hasMany('App\User', 'id', 'idUsuario')->where('estado', true);
     }
 
     public function getRoles()

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Campus;
+use App\Custodios;
 use App\InfoInventario;
 use App\ItemsInventario;
+use App\Sedes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class InventarioController extends Controller
@@ -86,6 +90,89 @@ class InventarioController extends Controller
 
         }
         return response()->json([], 201);
+    }
+
+    public function getFile(Request $request)
+    {
+
+        Excel::load('storage\\app\\frames\\frame.xlsx', function ($file) use ($request) {
+
+            $file->sheet('Formulario', function ($sheet) use ($request) {
+                $idSede = Campus::where('id', $request->data['campus'])->value('idSede');
+                $sede = Sedes::where('id', $idSede)->value('sede');
+                $campus = Campus::where('id', $request->data['campus'])->value('campus');
+                $custodio = Custodios::where('id', $request->data['custodio'][0]['id'])->first();
+                $nombreRevisor = Auth::user()->name;
+
+                $sheet->cell('D14', function ($cell) use ($sede) {
+                    $cell->setValue($sede);
+                });
+                $sheet->cell('D15', function ($cell) use ($sede, $campus) {
+                    $cell->setValue($sede . ' - ' . $campus);
+                });
+                $sheet->cell('D16', function ($cell) use ($sede, $campus, $request) {
+                    $cell->setValue($sede . ' - ' . $campus . '- P' . $request->data['pabellon']);
+                });
+                $sheet->cell('D17', function ($cell) use ($request) {
+                    $cell->setValue($request->data['piso']);
+                });
+                $sheet->cell('D18', function ($cell) use ($request) {
+                    $cell->setValue($request->data['codigoUbicacion']);
+                });
+                $sheet->cell('G14', function ($cell) use ($custodio) {
+                    $cell->setValue($custodio->nombre);
+                });
+                $sheet->cell('G15', function ($cell) use ($custodio) {
+                    $cell->setValue($custodio->rut);
+                });
+                $sheet->cell('G16', function ($cell) use ($custodio) {
+                    $cell->setValue($custodio->unidad);
+                });
+                $sheet->cell('G17', function ($cell) use ($custodio) {
+                    $cell->setValue($custodio->nombreDependencia);
+                });
+                $sheet->cell('A22', function ($cell) use ($custodio) {
+                    $cell->setValue(date('d/m/Y', time()));
+                });
+                $sheet->cell('D22', function ($cell) use ($nombreRevisor) {
+                    $cell->setValue($nombreRevisor);
+                });
+
+
+                foreach ($request->items as $index => $item) {
+
+                    $sheet->cell('B' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['codigo']['anterior']);
+                    });
+                    $sheet->cell('C' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['codigo']['nuevo']);
+                    });
+                    $sheet->cell('D' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['detalles']['descripcion']);
+                    });
+                    $sheet->cell('E' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['detalles']['marca']);
+                    });
+                    $sheet->cell('F' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['detalles']['modelo']);
+                    });
+                    $sheet->cell('G' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['detalles']['numeroSerie']);
+                    });
+                    $sheet->cell('I' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['estado']);
+                    });
+                    $sheet->cell('J' . ($index + 28), function ($cell) use ($item) {
+                        $cell->setValue($item['comentario']);
+                    });
+                }
+
+
+            });
+
+        })->store('xlsx', storage_path('excel/exports'));
+
+        //return response()->json($request->all(), 200);
     }
 
 }

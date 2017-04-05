@@ -13,23 +13,15 @@
                                     <th></th>
                                     <th class="text-center borderRight" colspan="2">
                                         Codigo
-
-
                                     </th>
                                     <th class="text-center borderLeft borderRight" colspan="5">
                                         Detalles del bien
-
-
                                     </th>
                                     <th class="text-center borderLeft" colspan="4">
                                         Observaciones del bien
-
-
                                     </th>
                                     <th class="text-center borderLeft" colspan="2">
                                         Opciones
-
-
                                     </th>
                                 </tr>
                                 </thead>
@@ -103,18 +95,15 @@
                                                v-model="item.comentario"
                                                class="form-control input-sm">
                                     </td>
-
                                     <td>
                                         <button class="btn btn-info text-center center-block"
                                                 data-toggle="modal" href="#modalPreview"
-
                                                 title="Previsualizar esta fila">
                                             <i class="fa fa-eye"></i>
                                         </button>
                                     </td>
                                     <td>
                                         <button class="btn btn-danger text-center center-block"
-
                                                 title="Eliminar fila">
                                             <i class="fa fa-minus"></i>
                                         </button>
@@ -123,7 +112,9 @@
                                 </tbody>
                             </table>
                         </div>
-
+                        <button class="btn btn-success pull-right">
+                            Guardar Cambios
+                        </button>
                     </div>
                 </div>
             </div>

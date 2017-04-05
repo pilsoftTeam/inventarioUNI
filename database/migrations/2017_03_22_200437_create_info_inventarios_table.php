@@ -25,7 +25,7 @@ class CreateInfoInventariosTable extends Migration
             $table->integer('numeroPabellon');
             $table->integer('numeroPiso');
             $table->string('codigoUbicacion');
-            $table->string('rutaImagenLayout');
+            $table->string('rutaImagenLayout')->nullable();
             $table->timestamps();
         });
     }

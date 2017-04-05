@@ -119,7 +119,7 @@
                 });
             },
             onSearch(searchQuery) {
-                console.log('Searching', searchQuery);
+                console.log('Buscandos', searchQuery);
                 axios.get(`api/get/inventarios?search=${searchQuery}`).then(r => {
                     this.information.pagination = r.data.pagination;
                     this.information.data = r.data.data;

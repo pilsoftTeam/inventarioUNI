@@ -137,7 +137,14 @@
                             <i class="fa fa-map-o" aria-hidden="true"></i>
                         </a>
 
+                        <button class="btn btn-info pull-left"
+                                title="Imprimir este inventario" @click="getFile">
+                            <i class="fa fa-print"></i>
+                        </button>
+
+
                         <div class="btn-group pull-right">
+
                             <button type="button"
                                     class="btn btn-primary"
                                     @mouseover="showAddRowMessage = true"
@@ -499,12 +506,16 @@
                 this.preview = item;
             },
             uploadInventario(){
-                let a = _.forEach(this.items, i => {
+                let items = this.items.slice(0);
+                console.log(items);
+                let a = _.forEach(items, i => {
                     _.forEach(i.fileList, f => {
                         if (f.xhrResponse.statusCode === 201) {
                             i.rutaArchivo = JSON.parse(f.xhrResponse.response)
                         }
                     });
+
+                    //Find alternatives to delete. ITs fucking with u men
                     delete i.fileList
                 });
 
@@ -522,9 +533,25 @@
 
             back(){
                 this.$emit('back')
+            },
+
+            getFile(){
+                let items = this.items;
+                let a = _.forEach(items, i => {
+                    delete i.fileList
+                });
+
+                let inventario = {
+                    data: this.dataInventario,
+                    items: a
+                };
+
+                axios.post('api/get/frame/excel', inventario).then(r => {
+                    console.log(r.data)
+                }).catch(e => {
+                    console.log(e)
+                })
             }
-
-
         },
         computed: {}
 
