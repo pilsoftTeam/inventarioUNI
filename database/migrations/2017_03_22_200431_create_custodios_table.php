@@ -19,6 +19,7 @@ class CreateCustodiosTable extends Migration
             $table->integer('rut')->unique();
             $table->string('unidad');
             $table->string('nombreDependencia');
+            $table->boolean('estado')->default(true);
             $table->timestamps();
         });
     }

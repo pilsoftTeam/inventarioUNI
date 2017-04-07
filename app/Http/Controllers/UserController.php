@@ -23,8 +23,6 @@ class UserController extends Controller
 
     public function save(Request $request)
     {
-        $randomString = str_random(12);
-        $pass = bcrypt($randomString);
         $user = new User();
         $perfilamiento = new Perfiles();
 
@@ -32,7 +30,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->rut = $request->rut;
         $user->fono = $request->fono;
-        $user->password = $pass;
+        $user->password = bcrypt($request->rut);
         $user->save();
 
         $perfilamiento->idRol = $request->idRol;
@@ -40,7 +38,7 @@ class UserController extends Controller
         $perfilamiento->save();
 
 
-        return response()->json($randomString, 200);
+        return response()->json($request->rut, 200);
     }
 
     public function update(Request $request)
@@ -55,8 +53,6 @@ class UserController extends Controller
             'fono' => $request->get_users[0]['fono'],
             'email' => $request->get_users[0]['email'],
         ]);
-
-
         return response()->json([], 200);
     }
 

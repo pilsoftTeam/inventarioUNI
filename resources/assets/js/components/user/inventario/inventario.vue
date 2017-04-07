@@ -231,7 +231,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <ul class="list-group" v-if="preview">
+                                <ul class="list-group" v-if="preview" style="word-wrap: break-word">
                                     <li class="list-group-item">
                                         <b>Codigo Anterior : </b> <span>{{preview.codigo.anterior}}</span>
                                     </li>
@@ -401,6 +401,7 @@
 <script>
     import filesize from 'filesize'
     import _ from 'lodash'
+    import downloader from './../../modules/fileDownload'
     export default {
         data () {
             return {
@@ -433,7 +434,8 @@
                     }
                 },
                 showAddRowMessage: false,
-                showEndInventarioMessage: false
+                showEndInventarioMessage: false,
+                errorOnUpload: false
 
             }
         },
@@ -506,8 +508,7 @@
                 this.preview = item;
             },
             uploadInventario(){
-                let items = this.items.slice(0);
-                console.log(items);
+                let items = JSON.parse(JSON.stringify(this.items));
                 let a = _.forEach(items, i => {
                     _.forEach(i.fileList, f => {
                         if (f.xhrResponse.statusCode === 201) {
@@ -524,19 +525,48 @@
                     items: a
                 };
                 axios.post('api/upload/inventario', inventario).then(r => {
-                    console.log(r.data);
+                    alert('Inventario guardado exitosamente. El numero de folio es ' + r.data + '. Ahora se procedera a recargar la pagina')
                     r.status === 201 ? location.reload() : false
                 }).catch(e => {
-                    console.log(e)
+                    $('#modalEndInventario').modal('hide');
+                    alert('Hubo un error al intentar guardar el inventario. Por favor asegurese de haber completado todos los campos y haber subido al menos un archivo por cada fila.');
                 })
             },
 
             back(){
-                this.$emit('back')
+                let confirm = window.confirm("Sr Usuario . Al salir del cuestionario , perdera los items y documentos que haya ingresado");
+                if (confirm) {
+
+
+                    let items = JSON.parse(JSON.stringify(this.items));
+                    let docs = [];
+                    let a = _.forEach(items, i => {
+                        _.forEach(i.fileList, f => {
+                            if (f.xhrResponse.statusCode === 201) {
+                                let obj = {
+                                    ruta: f.xhrResponse.response,
+                                    filename: f.name
+                                };
+                                docs.push(obj);
+                            }
+                        });
+                        delete i.fileList
+                    });
+                    axios.post('api/delete/failed/inventory', docs).then(r => {
+                        console.log(r.data)
+                    }).catch(e => {
+                        console.log()
+                    });
+
+
+                    this.$emit('back')
+                }
+
             },
 
             getFile(){
-                let items = this.items;
+
+                let items = JSON.parse(JSON.stringify(this.items));
                 let a = _.forEach(items, i => {
                     delete i.fileList
                 });
@@ -546,10 +576,12 @@
                     items: a
                 };
 
-                axios.post('api/get/frame/excel', inventario).then(r => {
-                    console.log(r.data)
+                axios.post('api/get/frame/excel', inventario, {
+                    responseType: 'arraybuffer'
+                }).then(r => {
+                    downloader(r.data, 'inventario.xlsx')
                 }).catch(e => {
-                    console.log(e)
+                    alert('Hay un error')
                 })
             }
         },

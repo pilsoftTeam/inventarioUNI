@@ -9,12 +9,15 @@ class CustodiosController extends Controller
 {
     public function index()
     {
-        return response()->json(Custodios::all(), 200);
+        $custodios = Custodios::where('estado', true)->get();
+        return response()->json($custodios, 200);
     }
 
     public function search($rut)
     {
-        $rutCustodio = Custodios::where('rut', $rut)->get();
+        $rutCustodio = Custodios::where('rut', $rut)
+            ->where('estado', true)
+            ->get();
         return response()->json($rutCustodio, 200);
     }
 
@@ -42,7 +45,9 @@ class CustodiosController extends Controller
 
     public function delete($id)
     {
-        Custodios::destroy($id);
+        Custodios::where('id', $id)->update([
+            'estado' => false
+        ]);
         return response()->json([], 200);
     }
 }

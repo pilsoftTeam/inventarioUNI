@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- TAB NAVIGATION -->
                 <ul class="nav nav-tabs" role="tablist">

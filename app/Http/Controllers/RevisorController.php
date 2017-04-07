@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\InfoInventario;
 use App\Sedes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RevisorController extends Controller
 {
@@ -15,9 +16,21 @@ class RevisorController extends Controller
         return response()->json([$informacion, $sedesHechas], 200);
     }
 
-    public function searchCodigoUbicacion($ubicacion)
+    public function validarInventario(Request $request)
     {
-        $v = InfoInventario::where('codigoUbicacion', $ubicacion)->first();
-        return response()->json($v, 200);
+        $validacion = InfoInventario::where('idCampus', $request->campus)
+            ->where('numeroPabellon', $request->pabellon)
+            ->where('numeroPiso', $request->piso)->first();
+        return response()->json($validacion, 200);
+
+    }
+
+    public function deleteFailed(Request $request)
+    {
+        $items = $request->all();
+        foreach ($items as $item) {
+            Storage::delete(json_decode($item['ruta']) . '/' . $item['filename']);
+        }
+        return response()->json([], 200);
     }
 }

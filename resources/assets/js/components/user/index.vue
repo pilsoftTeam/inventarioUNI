@@ -1,81 +1,97 @@
 <template>
     <div>
-        <div v-if="init">
-            <div class="col-xs-18 col-sm-4 col-md-4 col-lg-4">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h4 class="text-center">Información de ubicación</h4>
-                        <hr>
-                        <div class="form-group">
-                            <label class="control-label">Sede</label>
-                            <select class="form-control" @change="setCampus" v-model="data.sede">
-                                <option value=""> -- Seleccione --</option>
-                                <option v-for="item in sedes" :value="item.id" :key="item.id">
-                                    {{item.sede}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Campus</label>
-                            <select class="form-control" v-model="data.campus" @change="setPabellon">
-                                <option value=""> -- Seleccione --</option>
-                                <option v-for="item in campus.get_campus" :key="item.id" :value="item.id">
-                                    {{campus.sede}} - {{item.campus}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Pabellon</label>
-                            <select class="form-control" v-model="data.pabellon">
-                                <option value=""> -- Seleccione --</option>
 
-                                <option v-for="(key , item) in pabellones.pabellones"
-                                        :value="key">
-                                    {{ pabellones.campus }} -- Pabellon {{ key }}
 
-                                </option>
-                            </select>
+        <!-- TAB NAVIGATION -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#tab1" role="tab" data-toggle="tab">Inventario</a></li>
+            <li><a href="#tab2" role="tab" data-toggle="tab">Custodios</a></li>
+        </ul>
+        <!-- TAB CONTENT -->
+        <div class="tab-content">
+            <div class="active tab-pane fade in" id="tab1">
+                <br>
+                <div v-if="init">
+                    <div class="col-xs-18 col-sm-4 col-md-4 col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4 class="text-center">Información de ubicación</h4>
+                                <hr>
+                                <div class="form-group">
+                                    <label class="control-label">Sede</label>
+                                    <select class="form-control" @change="setCampus" v-model="data.sede">
+                                        <option value=""> -- Seleccione --</option>
+                                        <option v-for="item in sedes" :value="item.id" :key="item.id">
+                                            {{item.sede}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Campus</label>
+                                    <select class="form-control" v-model="data.campus" @change="setPabellon">
+                                        <option value=""> -- Seleccione --</option>
+                                        <option v-for="item in campus.get_campus" :key="item.id" :value="item.id">
+                                            {{campus.sede}} - {{item.campus}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Pabellon</label>
+                                    <select class="form-control" v-model="data.pabellon" @change="setPiso">
+                                        <option value=""> -- Seleccione --</option>
+
+                                        <option v-for="(key , item) in pabellones.pabellones"
+                                                :value="key">
+                                            {{ pabellones.campus }} -- Pabellon {{ key }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Piso</label>
+                                    <select class="form-control" v-model="data.piso" @change="setCodigoUbicacion">
+                                        <option value=""> -- Seleccione --</option>
+                                        <option v-for="piso in 10" :value="piso" :key="piso.id">
+                                            {{piso}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Codigo de ubicacion</label>
+                                    <input type="text"
+                                           v-model="data.codigoUbicacion"
+                                           class="form-control"
+                                           placeholder="Escriba aca">
+                                </div>
+                                <button class="btn btn-block btn-info" @click="next" :disabled="!showInfoComponent">
+                                    Siguiente
+                                </button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">Piso</label>
-                            <select class="form-control" v-model="data.piso">
-                                <option value=""> -- Seleccione --</option>
-                                <option v-for="piso in 10" :value="piso" :key="piso.id">
-                                    {{piso}}
-                                </option>
-                            </select>
+
+
+                    </div>
+                    <div class="col-xs-18 col-sm-8 col-md-8 col-lg-8">
+                        <div class="panel panel-default" v-if="showComponent">
+                            <div class="panel-body">
+                                <info :dataInventario="data" :names="names" @custodio="datosCustodio"></info>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">Codigo de ubicacion</label>
-                            <input type="text"
-                                   v-model="data.codigoUbicacion"
-                                   class="form-control"
-                                   placeholder="Escriba aca">
+                        <div v-else>
+                            <h1 class="text-center"
+                                style="margin-top: 25%">
+                                Por favor llene los items
+                            </h1>
                         </div>
-                        <button class="btn btn-block btn-info" @click="next" :disabled="!showInfoComponent">
-                            Siguiente
-                        </button>
                     </div>
                 </div>
-
-
-            </div>
-            <div class="col-xs-18 col-sm-8 col-md-8 col-lg-8">
-                <div class="panel panel-default" v-if="showComponent">
-                    <div class="panel-body">
-                        <info :dataInventario="data" :names="names" @custodio="datosCustodio"></info>
-                    </div>
-                </div>
-                <div v-else>
-                    <h1 class="text-center"
-                        style="margin-top: 25%">
-                        Por favor llene los items
-                    </h1>
+                <div v-if="inventario">
+                    <inventario :dataInventario="data" @back="back"></inventario>
                 </div>
             </div>
-        </div>
-        <div v-if="inventario">
-            <inventario :dataInventario="data" @back="back"></inventario>
+            <div class="tab-pane fade" id="tab2">
+                <br>
+                <custodios></custodios>
+            </div>
         </div>
 
 
@@ -86,6 +102,7 @@
     import _ from 'lodash'
     import Info from './dataInfo/index.vue'
     import Inventario from './inventario/inventario.vue'
+    import Custodios from './../admin/custodios/index.vue'
     export default {
         mounted(){
             this.getDatos();
@@ -169,7 +186,13 @@
                 }
 
             },
-
+            setPiso(){
+                this.data.piso = '';
+                this.data.codigoUbicacion = '';
+            },
+            setCodigoUbicacion(){
+                this.data.codigoUbicacion = '';
+            },
             back(){
                 this.inventario = false;
                 this.init = true;
@@ -177,8 +200,8 @@
 
             next(){
                 if (this.data.codigoUbicacion) {
-                    axios.get('api/validar/codigo/ubicacion/' + this.data.codigoUbicacion).then(r => {
-                        if (!r.data.codigoUbicacion) {
+                    axios.post('api/validar/inventario', this.data).then(r => {
+                        if (Object.keys(r.data).length === 0 && r.data.constructor === Object) {
                             _.forEach(this.campus.get_campus, c => {
                                 if (c.id == this.data.campus) {
                                     this.names.campus = c.campus;
@@ -187,7 +210,7 @@
                             this.names.sede = this.campus.sede;
                             this.showComponent = true;
                         } else {
-                            alert('El codigo de ubicacion ingresado,  ya se encuentra en nuestra base de datos. Por favor intentelo nuevamente con otro codigo')
+                            alert('Sr(a) usuario. Este inventario ya aparece en nuestros registros como completo. Por favor intentelo de nuevo con otro')
                         }
                     }).catch(e => {
                         console.log(e)
@@ -231,7 +254,7 @@
             }
         },
         components: {
-            Info, Inventario
+            Info, Inventario, Custodios
         }
     }
 </script>

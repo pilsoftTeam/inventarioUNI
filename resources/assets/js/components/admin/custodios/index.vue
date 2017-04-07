@@ -234,7 +234,7 @@
                     unidad: '',
                     nombreDependencia: ''
                 },
-                deleteCustodio: ''
+                deleteCustodio: '',
             }
         },
         methods: {
@@ -252,7 +252,6 @@
                         this.newCustodio.nombre = '';
                         this.newCustodio.unidad = '';
                         this.newCustodio.nombreDependencia = '';
-
                         this.getCustodios();
                     }).catch(e => {
                         console.log(e)

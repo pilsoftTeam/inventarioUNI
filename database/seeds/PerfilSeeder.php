@@ -25,6 +25,45 @@ class PerfilSeeder extends Seeder
                 'idUsuario' => 3,
                 'idRol' => 3
             ],
+            [
+                'idUsuario' => 4,
+                'idRol' => 1
+            ],
+            [
+                'idUsuario' => 5,
+                'idRol' => 1
+            ],
+            [
+                'idUsuario' => 6,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 7,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 8,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 9,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 10,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 11,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 12,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 13,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 14,
+                'idRol' => 1
+            ], [
+                'idUsuario' => 15,
+                'idRol' => 1
+            ],
         ];
 
 

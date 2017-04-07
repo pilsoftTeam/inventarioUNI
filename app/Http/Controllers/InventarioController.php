@@ -7,6 +7,7 @@ use App\Custodios;
 use App\InfoInventario;
 use App\ItemsInventario;
 use App\Sedes;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -42,7 +43,6 @@ class InventarioController extends Controller
         $request->file->storeAs($ruta, $fileName);
 
         return response()->json($ruta, 201);
-
     }
 
     public function deleteFiles(Request $request)
@@ -55,15 +55,20 @@ class InventarioController extends Controller
 
     public function endInventario(Request $request)
     {
-        $last = InfoInventario::orderBy('id', 'desc')->first();
+        /*$last = InfoInventario::orderBy('id', 'desc')->first();
 
         if ($last['id'] == 1) {
             $last['id'] = 2;
         } elseif (!$last) {
             $last['id'] = 1;
+        } else {
+            $last['id'] += 1;
         }
+
+        $folio = sprintf('%012d', $last['id']);*/
+
+
         $infoInventario = new InfoInventario();
-        $infoInventario->folio = sprintf('%012d', $last['id']);
         $infoInventario->idRevisor = Auth::user()->id;
         $infoInventario->idCampus = $request->data['campus'];
         $infoInventario->idCustodio = $request->data['custodio'][0]['id'];
@@ -74,26 +79,37 @@ class InventarioController extends Controller
         $infoInventario->save();
         $idInfoInventario = $infoInventario->id;
 
+
         foreach ($request->items as $index => $item) {
-            $items = new ItemsInventario();
-            $items->idInfoInventario = $idInfoInventario;
-            $items->codigoAnterior = $item['codigo']['anterior'];
-            $items->codigoNuevo = $item['codigo']['nuevo'];
-            $items->descripcion = $item['detalles']['descripcion'];
-            $items->marca = $item['detalles']['marca'];
-            $items->modelo = $item['detalles']['modelo'];
-            $items->numeroSerie = $item['detalles']['numeroSerie'];
-            $items->rutaImagen = $item['rutaArchivo'];
-            $items->estado = $item['estado'];
-            $items->comentario = $item['comentario'];
-            $items->save();
+
+            try {
+                $items = new ItemsInventario();
+                $items->idInfoInventario = $idInfoInventario;
+                $items->codigoAnterior = $item['codigo']['anterior'];
+                $items->codigoNuevo = $item['codigo']['nuevo'];
+                $items->descripcion = $item['detalles']['descripcion'];
+                $items->marca = $item['detalles']['marca'];
+                $items->modelo = $item['detalles']['modelo'];
+                $items->numeroSerie = $item['detalles']['numeroSerie'];
+                $items->rutaImagen = $item['rutaArchivo'];
+                $items->estado = $item['estado'];
+                $items->comentario = $item['comentario'];
+                $items->save();
+            } catch (QueryException $ex) {
+                ItemsInventario::where('idInfoInventario', $idInfoInventario)->delete();
+                InfoInventario::where('id', $idInfoInventario)->delete();
+                return response()->json($ex, 500);
+            }
 
         }
-        return response()->json([], 201);
+
+
+        return response()->json($idInfoInventario, 201);
     }
 
     public function getFile(Request $request)
     {
+        //return response()->json($request->all());
 
         Excel::load('storage\\app\\frames\\frame.xlsx', function ($file) use ($request) {
 
@@ -166,13 +182,9 @@ class InventarioController extends Controller
                         $cell->setValue($item['comentario']);
                     });
                 }
-
-
             });
 
-        })->store('xlsx', storage_path('excel/exports'));
-
-        //return response()->json($request->all(), 200);
+        })->download('xlsx');
     }
 
 }

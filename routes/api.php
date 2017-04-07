@@ -37,14 +37,23 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //Validacion
 
-    Route::get('/validar/codigo/ubicacion/{ubicacion}', 'RevisorController@searchCodigoUbicacion');
+    Route::post('/validar/inventario', 'RevisorController@validarInventario');
+    Route::post('/delete/failed/inventory', 'RevisorController@deleteFailed');
 
     //Utils
 
     //Revision inventarios
 
     Route::get('/get/inventarios', 'AdminController@index');
+    Route::get('/search/inventarios', 'AdminController@search');
     Route::get('/get/items/inventario/{id}', 'AdminController@getItems');
+
+
+    Route::post('/file/edit/upload', 'AdminController@editFilesFromInventory');
+    Route::post('/file/remove/upload', 'AdminController@deleteFiles');
+    Route::post('/file/get/excel', 'AdminController@getFileFromEdition');
+    Route::post('/save/updated/inventario', 'AdminController@saveInventario');
+    Route::post('/get/files', 'AdminController@getFiles');
 
     //Usuarios
 
@@ -53,5 +62,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/add/user', 'UserController@save');
     Route::put('/update/user', 'UserController@update');
     Route::delete('/delete/user/{id}', 'UserController@deleteUser');
+
+    //Utils
+    Route::get('/get/detailed/excel', 'UtilsController@detailedDump');
+    Route::get('/get/bulk/excel', 'UtilsController@bulkDump');
 
 });

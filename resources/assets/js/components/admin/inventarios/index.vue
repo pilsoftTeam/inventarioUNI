@@ -16,7 +16,7 @@
 
         <div class="row" v-if="showFullInventory">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <inventario :dataInventario="selectedInventario"></inventario>
+                <inventario :dataInventario="selectedInventario" @back="goBack"></inventario>
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                 columns: [
                     {
                         name: 'Folio',
-                        key: 'folio'
+                        key: 'id'
                     },
                     {
                         name: 'Sede',
@@ -119,19 +119,28 @@
                 });
             },
             onSearch(searchQuery) {
-                console.log('Buscandos', searchQuery);
-                axios.get(`api/get/inventarios?search=${searchQuery}`).then(r => {
-                    this.information.pagination = r.data.pagination;
-                    this.information.data = r.data.data;
-                }).catch(e => {
-                    console.log(e)
-                });
+                if (searchQuery) {
+                    axios.get(`api/search/inventarios?search=${searchQuery}`).then(r => {
+                        this.information.pagination = r.data.pagination;
+                        this.information.data = r.data.data;
+                    }).catch(e => {
+                        console.log(e)
+                    });
+                } else {
+                    this.getInventarios();
+                }
+
+
             },
             setInventario(obj){
                 this.showInventoryList = false;
                 this.showFullInventory = true;
                 this.selectedInventario = obj
 
+            },
+            goBack(){
+                this.showFullInventory = false;
+                this.showInventoryList = true;
             }
         },
         components: {
